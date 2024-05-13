@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/header.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Join</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <main id="main">
+        <section id="contact" class="contact mb-5">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <div class="col-lg-12 text-center mb-5">
+                        <h3>Join Us</h3>
+                        <small>저희와 함께 해주실건가요?💖</small>
+                    </div>
+                </div>
+                <div class="form mt-1">
+                    <form action="/login/login" method="post" role="form" class="php-email-form">
+                        <label class="p-2" for="member_id">ID</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="member_id" id="member_id"  placeholder="ID" aria-label="ID" aria-describedby="idCheck">
+                            <button class="btn btn-outline-secondary" type="button" id="idCheck">중복확인</button>
+                        </div>
+                        <label class="p-2" for="member_id">NAME</label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="name" id="name" placeholder="NAME" required>
+                        </div>
+                        <label class="p-2" for="member_id">PASSWORD</label>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pwd" id="pwd" placeholder="PASSWORD" required>
+                            <div class="p-1">
+                                <small>※ 10자 이상의 영문 소문자, 숫자, 특수문자 모두 조합하여 설정하여 주십시오</small>
+                            </div>
+                        </div>
+                        <label class="p-2" for="member_id">PASSWORD CHECK</label>
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="pwdCheck" id="pwdCheck" placeholder="PASSWORD CHECK" required>
+                        </div>
+                        <label class="p-2" for="member_id">PHONE</label>
+                        <div class="form-group">
+                            <input type="tel" class="form-control" name="phone" id="phone" placeholder="phone" required>
+                        </div>
+                        <label class="p-2" for="member_id">EMAIL</label>
+                        <div class="input-group mb-3">
+                            <input type="email" class="form-control" name="email" id="email"  placeholder="email" aria-label="email" aria-describedby="emailCheck">
+                            <button class="btn btn-outline-secondary" type="button" id="emailCheck">중복확인</button>
+                        </div>
+                        <div class="text-center"><button type="submit">submit</button></div>
+                    </form>
+                </div><!-- End Contact Form -->
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+</div>
+</body>
+</html>

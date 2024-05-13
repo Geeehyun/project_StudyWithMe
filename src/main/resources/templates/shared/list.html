@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/header.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Shared Study</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <main id="main">
+        <section id="contact" class="contact mb-5">
+            <div class="container" data-aos="fade-up">
+                <div class="form mt-1">
+                    <form action="/login/findPwd" method="post" role="form" class="php-email-form">
+                        <label class="p-2">기간</label>
+                        <div class="form-group d-flex align-items-center">
+                            <input type="date" class="form-control w-25" name="start-date" id="start-date">
+                            <span class="pe-3 ps-3"> ~ </span>
+                            <input type="date" class="form-control w-25" name="end-date" id="end-date">
+                        </div>
+                        <label class="p-2">키워드</label>
+                        <div class="form-group d-flex">
+                            <select class="form-select w-25" aria-label="Default select example">
+                                <option>전체</option>
+                                <option value="1">제목</option>
+                                <option value="2">글내용</option>
+                            </select>
+                            <input type="text" class="form-control w-75" name="keyword" id="keyword" placeholder="키워드" required>
+                        </div>
+                        <div class="text-center"><button type="submit">검색</button></div>
+                    </form>
+                </div><!-- End Contact Form -->
+            </div>
+            <div class="container" data-aos="fade-up">
+                <div class="p-2 bg-white mt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <div>
+                            <button type="button" class="btn btn-light">내가 한 공유</button>
+                            <button type="button" class="btn btn-primary">내가 받은 공유</button>
+                        </div>
+                        <div class="d-flex align-items-center w-auto">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="10">10개씩 보기</option>
+                                <option value="30">30개씩 보기</option>
+                                <option value="50">50개씩 보기</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <colgroup>
+                            <col style="width: 5%">
+                            <col style="width: 40%">
+                            <col style="width: 30%">
+                            <col style="width: 15%">
+                        </colgroup>
+                        <thead class="table-secondary">
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="col">No</th>
+                            <th class="text-center bg-primary text-white" scope="col">제목</th>
+                            <th class="text-center bg-primary text-white" scope="col">공유자</th>
+                            <th class="text-center bg-primary text-white" scope="col">등록일</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="cursor: pointer" onclick="location.href = '/shared/view?idx=1'">
+                                <th class="text-center" scope="row">1</th>
+                                <td class="text-center">제목입니다.</td>
+                                <td class="text-center">
+                                    <span class="d-block">장지현 (2024-05-13 00:00:00)</span>
+                                </td>
+                                <td class="text-center">2024-05-13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center py-4">
+                        <div class="custom-pagination">
+                            <a href="#" class="prev">◀</a>
+                            <a href="#" class="active">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <a href="#">4</a>
+                            <a href="#">5</a>
+                            <a href="#" class="next">▶</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+</div>
+</body>
+</html>
