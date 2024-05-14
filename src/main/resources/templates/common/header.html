@@ -32,10 +32,8 @@
 <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
 
-        <a href="/main/main" class="logo d-flex align-items-center">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="/img/logo.png" alt=""> -->
-            <h1 class="pt-2"><img src="/img/study.png"></h1>
+        <a href="/main/main" class="logo d-flex align-items-center" style="height: 100%; width: auto">
+            <h1 class="pt-2 h-100 w-auto"><img src="/img/study.png" class="h-100 w-auto"></h1>
         </a>
 
         <nav id="navbar" class="navbar">
@@ -43,14 +41,18 @@
                 <li><a href="/" class="text-white">오늘의 학습</a></li>
                 <li><a href="/mystudy/list" class="text-white">나의 학습</a></li>
                 <li><a href="/shared/list" class="text-white">공유 학습</a></li>
-                <li><a href="/mypage/mypage" class="text-white">마이페이지</a></li>
             </ul>
         </nav><!-- .navbar -->
         <div class="position-relative">
-            <a href="/login/login" class="mx-2 text-white">Login</a>
-            <a href="/login/join" class="mx-2 text-white">Join us</a>
-            <a href="#" class="mx-2 text-white">Logout</a>
-            <span class="text-white" th:text="${session.member_id} != null ? ${session.member_id}"></span>
+            <th:block th:if="${session.memberDTO == null}">
+                <a href="/login/login" class="mx-2 text-white">Login</a>
+                <a href="/login/join" class="mx-2 text-white">Join us</a>
+            </th:block>
+            <th:block th:unless="${session.memberDTO == null}">
+                <a href="#" class="mx-2 text-white" onclick="logout()">Logout</a>
+                <a href="/mypage/mypage" class="mx-2 text-white" th:text="${session.memberDTO.memberName}+'님'"></a>
+            </th:block>
+
         </div>
     </div>
 
@@ -104,6 +106,40 @@
 <!--<script src="/vendor/php-email-form/validate.js"></script>-->
 <!-- Template Main JS File -->
 <script src="/js/main.js"></script>
+<th:block th:if="${session.memberDTO != null}">
+    <script th:inline="javascript">
+        let memberId = [[${session.memberDTO.memberId}]];
+        function logout() {
+            let frm = document.createElement('form');
+            let input = document.createElement('input');
+            frm.id = 'frmLogout';
+            frm.action = "/login/logout";
+            frm.method = 'post';
+            input.type = 'hidden';
+            input.name = 'memberId';
+            input.value = memberId;
+            frm.append(input);
+            document.body.append(frm);
+            document.getElementById('frmLogout').submit();
+        }
+    </script>
+</th:block>
+<th:block th:if="${err != null}">
+    <script th:inline="javascript">
+        let err = [[${err}!= null ? err : nothing]];
+        if (err == "err") {
+            alert([[${err}]]);
+        }
+    </script>
+</th:block>
+<th:block th:if="${result != null}">
+    <script th:inline="javascript">
+        let result = [[${result}!= null ? result : nothing]];
+        if (result == "result") {
+            alert([[${result}]]);
+        }
+    </script>
+</th:block>
 
 <th:block layout:fragment="script">
 

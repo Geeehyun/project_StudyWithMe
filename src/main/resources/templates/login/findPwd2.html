@@ -22,7 +22,7 @@
                 <div class="form mt-1">
                     <form action="/login/findPwd" method="post" role="form" class="php-email-form">
                         <input type="hidden" name="step" value="2">
-                        <input type="hidden" name="member_id" th:value="${session.member_id} != null ? ${session.member_id}" >
+                        <input type="hidden" name="memberId" th:value="${memberId} != null ? ${memberId}" >
                         <label class="p-2" for="org_pwd">기존 패스워드</label>
                         <div class="form-group">
                             <input type="password" class="form-control" name="org_pwd" id="org_pwd" placeholder="기존 비밀번호" required>
