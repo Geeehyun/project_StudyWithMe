@@ -20,40 +20,43 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th class="text-center bg-primary text-white" scope="row">제목</th>
-                            <td class="text-start" colspan="3">제목입니다.</td>
+                            <th class="text-center bg-primary text-white" scope="row" >제목</th>
+                            <td class="text-start" colspan="3" th:text="${studyDTO.title}">제목입니다.</td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">등록일</th>
-                            <td class="text-center">2024-05-13</td>
+                            <td class="text-center" th:text="${studyDTO.regDateToString}">2024-05-13</td>
                             <th class="text-center bg-primary text-white" scope="row">좋아요</th>
-                            <td class="text-center"><i class="bi bi-heart-fill text-danger"></i> 100</td>
+                            <td class="text-center"><i class="bi bi-heart-fill text-danger"></i>&nbsp;<span th:text="${studyDTO.likes}"></span></td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">오늘의 학습 노출여부</th>
-                            <td class="text-center">Y</td>
+                            <td class="text-center" th:text="${studyDTO.displayYn}">Y</td>
                             <th class="text-center bg-primary text-white" scope="row">오늘의 학습 노출기간</th>
-                            <td class="text-center">2024-05-13 ~ 2024-05-13</td>
+                            <td class="text-center" th:text="${studyDTO.displayStartDateToString} + ' ~ ' + ${studyDTO.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">분야</th>
-                            <td class="text-start" colspan="3">맛집, 식당</td>
+                            <td class="text-start" colspan="3" th:text="${studyDTO.category}">맛집, 식당</td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">해쉬태그</th>
                             <td class="text-start" colspan="3">
-                                <span class="badge bg-primary-light">#태그1</span>
-                                <span class="badge bg-primary-light">#태그2</span>
-                                <span class="badge bg-primary-light">#태그3</span>
+                                <span class="badge bg-primary-light me-1" th:each="category :${studyDTO.categories}" th:text="${category}">#태그1</span>
                             </td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white align-middle" scope="row">공유한 사람</th>
-                            <td class="text-start" colspan="3">
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                            </td>
+                            <th:block th:if="${not sharedDTOList.isEmpty()}">
+                                <td class="text-start" colspan="3">
+                                    <span class="d-block" th:each="dto:${sharedDTOList}" th:text="${dto.memberName} + '(' + ${dto.regDateToString} +')'">장지현(2024-05-13 00:00:00)</span>
+                                </td>
+                            </th:block>
+                            <th:block th:unless="${not sharedDTOList.isEmpty()}">
+                                <td class="text-start" colspan="3">
+                                    없음
+                                </td>
+                            </th:block>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white align-middle" scope="row">썸네일</th>
@@ -61,9 +64,9 @@
                         </tr>
                         <tr>
                             <td class="text-start border align-middle">
-                                <img class="rounded" width="100%" src="/img/default.png">
+                                <img class="rounded" width="100%" th:src="${studyDTO.thumbnailPath} + ${studyDTO.thumbnail}">
                             </td>
-                            <td class="text-start overflow-y-scroll" colspan="3" style="height: 300px">
+                            <td class="text-start overflow-y-scroll" colspan="3" style="height: 300px" th:text="${studyDTO.content}">
                                 내용입니다.
                             </td>
                         </tr>
@@ -71,7 +74,7 @@
                     </table>
                     <div class="d-flex justify-content-between">
                         <div>
-                            <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/list'">목록</button>
+                            <button type="button" class="btn btn-primary" onclick="listLink()">목록</button>
                         </div>
                         <div>
                             <button type="button" class="btn btn-primary">삭제</button>
@@ -85,5 +88,36 @@
 
     </main><!-- End #main -->
 </div>
+<script layout:fragment="script" th:inline="javascript">
+    function listLink() {
+        let page = [[${param.page != null} ? ${param.page} : 1]];
+        let page_size = [[${param.page_size}]];
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let orderType = [[${param.orderType}]];
+        let queryString = "?page=" + page;
+        if (page_size != null) {
+            queryString += "&page_size=" + page_size;
+        }
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (orderType != null) {
+            queryString += "&orderType=" + orderType;
+        }
+        location.href = '/mystudy/list' + queryString;
+    }
+</script>
 </body>
 </html>

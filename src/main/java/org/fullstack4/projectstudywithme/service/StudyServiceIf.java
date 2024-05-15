@@ -1,10 +1,14 @@
 package org.fullstack4.projectstudywithme.service;
 
-import org.fullstack4.projectstudywithme.dto.PageRequestDTO;
-import org.fullstack4.projectstudywithme.dto.PageResponseDTO;
-import org.fullstack4.projectstudywithme.dto.StudyDTO;
+import jakarta.servlet.http.HttpSession;
+import org.fullstack4.projectstudywithme.dto.*;
+
+import java.util.Map;
 
 public interface StudyServiceIf {
-    public PageResponseDTO<StudyDTO> list(PageRequestDTO pageRequestDTO);
-
+    public PageResponseDTO<StudyDTO> list(PageRequestDTO pageRequestDTO, String memberId);
+    public Map<String, Object> view(int idx, String memberId);
+    public MemberDTO selectMember(String memberId, String sessionId);
+    public int registStudy(StudyDTO studyDTO);
+    public int registShare(StudySubDTO sharedDTO);
 }

@@ -21,15 +21,19 @@ public class StudyEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idx;
     @Column(length = 100, nullable = false)
-    private String thumbnailPath;
+    @Builder.Default
+    private String thumbnailPath="/upload/";
     @Column(length = 100, nullable = false)
-    private String thumbnail;
+    @Builder.Default
+    private String thumbnail="default.jpg";
     @Column(length = 100, nullable = false)
     private String title;
     @Column(length = 1000, nullable = false)
     private String content;
     @Column(length = 50, nullable = false)
     private String memberId;
+    @Column(length = 100, nullable = false)
+    private String memberName;
     @Column(length = 2, nullable = false)
     private String displayYn;
     @Column(length = 10, nullable = true)

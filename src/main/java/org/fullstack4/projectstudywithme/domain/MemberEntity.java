@@ -42,6 +42,6 @@ public class MemberEntity extends BaseEntity {
         this.pwd = pwd;
         this.phone = phone;
         this.email = email;
-        super.setModify_date(LocalDateTime.now());
+        super.setModifyDate(LocalDateTime.now());
     }
 }

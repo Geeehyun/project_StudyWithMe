@@ -52,6 +52,9 @@ dependencies {
 
     // validator
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.5.Final'
+
+    // JSON
+    implementation group: 'org.json', name: 'json', version: '20200518'
 }
 
 tasks.named('test') {

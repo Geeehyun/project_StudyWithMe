@@ -35,7 +35,12 @@ public class PageRequestDTO {
     private String search_type;
     private String[] search_types;
     private String search_word;
+    private String date1;
+    private String date2;
+    @Builder.Default
+    private String orderType="regDate";
     private String linkParams;
+
 
     public void setTotal_count(int total_count) {
         this.total_count = total_count;
@@ -44,7 +49,7 @@ public class PageRequestDTO {
         return (this.page-1) * this.page_size ;
     }
 
-    public String[] getSearch_type() {
+    public String[] getSearch_types() {
         if( search_type == null || search_type.isEmpty()) {
             return null;
         }
@@ -58,7 +63,6 @@ public class PageRequestDTO {
     public String getLinkParams() {
         if (this.linkParams == null || linkParams.isEmpty()) {
             StringBuilder sb = new StringBuilder();
-//           thispage null 이면 안넘어가게 막아야 함,,
             sb.append("page="+this.page);
             sb.append("&page_size"+this.page_size);
 
@@ -71,6 +75,15 @@ public class PageRequestDTO {
                 } catch (UnsupportedEncodingException e) {
 
                 }
+            }
+            if(date1 != null && !date1.isEmpty()) {
+                sb.append("&date1="+this.date1);
+            }
+            if(date2 != null && !date2.isEmpty()) {
+                sb.append("&date2="+this.date2);
+            }
+            if(orderType != null && !orderType.isEmpty()) {
+                sb.append("&orderType=" + this.orderType);
             }
             linkParams = sb.toString();
         }

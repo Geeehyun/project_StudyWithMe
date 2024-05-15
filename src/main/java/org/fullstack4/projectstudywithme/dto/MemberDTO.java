@@ -23,11 +23,12 @@ public class MemberDTO {
     private String phone;
     @NotNull
     private String email;
-    private String reg_date;
-    private String modify_date;
-    private String leave_date;
+    private String regDate;
+    private String modifyDate;
+    private String leaveDate;
     @Builder.Default
     private String status="Y";
     private String auto_login;
     private int tryCount;
+    private String message;
 }

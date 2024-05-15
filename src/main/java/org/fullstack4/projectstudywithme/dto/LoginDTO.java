@@ -16,9 +16,9 @@ public class LoginDTO {
     private String pwd;
     private String phone;
     private String email;
-    private String reg_date;
-    private String modify_date;
-    private String leave_date;
+    private String regDate;
+    private String modifyDate;
+    private String leaveDate;
     private String status;
     private String auto_login;
 }

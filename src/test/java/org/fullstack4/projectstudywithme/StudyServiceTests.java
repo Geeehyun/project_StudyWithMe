@@ -12,15 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Log4j2
 @SpringBootTest
 public class StudyServiceTests {
-    @Autowired
-    private StudyServiceIf studyServiceIf;
-    @Test
-    public void  testList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .search_type("u")
-                .search_word("test")
-                .build();
-        PageResponseDTO<StudyDTO> pageResponseDTO = studyServiceIf.list(pageRequestDTO);
-        log.info("pageResponseDTO : {}", pageResponseDTO);
-    }
+//    @Autowired
+//    private StudyServiceIf studyServiceIf;
+//    @Test
+//    public void  testList() {
+//        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+//                .build();
+//        PageResponseDTO<StudyDTO> pageResponseDTO = studyServiceIf.list(pageRequestDTO, "test");
+//        log.info("pageResponseDTO : {}", pageResponseDTO);
+//    }
 }

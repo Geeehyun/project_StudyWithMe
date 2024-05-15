@@ -20,4 +20,6 @@ public class SharedEntity extends BaseEntity {
     private int studyIdx;
     @Column(length = 50, nullable = false)
     private String memberId;
+    @Column(length = 100, nullable = false)
+    private String memberName;
 }

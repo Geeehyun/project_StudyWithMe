@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @EntityListeners(value = {AuditingEntityListener.class})
 public class BaseEntity {
     @CreatedDate
-    @Column(name="reg_date", updatable = false)
-    private LocalDateTime reg_date;
+    @Column( updatable = false)
+    private LocalDateTime regDate;
 
     @LastModifiedDate
-    @Column(name = "modify_date", updatable = true, nullable = true, insertable = false)
-    private LocalDateTime modify_date;
+    @Column(updatable = true, nullable = true, insertable = false)
+    private LocalDateTime modifyDate;
 
-    public void setModify_date(LocalDateTime modify_date) {
-        this.modify_date = LocalDateTime.now();
+    public void setModifyDate(LocalDateTime modify_date) {
+        this.modifyDate = LocalDateTime.now();
     }
 }

@@ -812,11 +812,17 @@ section {
   font-family: var(--font-secondary);
   margin: 5px;
   transition: 0.3s all ease;
+  cursor: pointer;
 }
 
 .custom-pagination a.active {
   background: var(--color-primary);
   color: var(--color-white);
+}
+.custom-pagination a.disabled, .custom-pagination a.disabled:hover, .custom-pagination a.disabled:active {
+  background: transparent !important;
+  color: gray;
+  cursor: default;
 }
 
 .custom-pagination a.active:hover {
