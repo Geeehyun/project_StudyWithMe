@@ -50,7 +50,7 @@ public class MyStudyController {
             List<StudySubDTO> likeDTO = (List<StudySubDTO>) map.get("likedDTOList");
             log.info("======================================== likeDTO : {}", likeDTO);
             List<String> likeMemberList = new ArrayList<>();
-            likeDTO.forEach(dto -> {likeMemberList.add(dto.getMemberId());});
+            if(likeDTO != null) likeDTO.forEach(dto -> {likeMemberList.add(dto.getMemberId());});
             log.info("======================================== likeMemberList : {}", likeMemberList);
             if(studyDTO.getMessage() != null) {
                 redirectAttributes.addFlashAttribute("err",studyDTO.getMessage());
@@ -244,11 +244,11 @@ public class MyStudyController {
             String sessionId = sessionMemberDTO.getMemberId();
             String sessionName= sessionMemberDTO.getMemberName();
             if(!idx.equals("0")) {
-                Map<String, Object> map = studyServiceIf.view(Integer.parseInt(idx), sessionId);
+                Map<String, Object> map = studyServiceIf.view(CommonUtil.parseInt(idx), sessionId);
                 StudyDTO studyDTO = (StudyDTO) map.get("studyDTO");
                 List<StudySubDTO> likeDTO = (List<StudySubDTO>) map.get("likedDTOList");
                 List<String> likeMemberList = new ArrayList<>();
-                likeDTO.forEach(dto -> {likeMemberList.add(dto.getMemberId());});
+                if(likeDTO != null) likeDTO.forEach(dto -> {likeMemberList.add(dto.getMemberId());});
                 if(!likeMemberList.contains(sessionId)) {
                     int result = studyServiceIf.likeStudy(idx, sessionId, sessionName);
                     if(result > 0) {

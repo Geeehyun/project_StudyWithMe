@@ -12,6 +12,7 @@ public interface StudyServiceIf {
     public PageResponseDTO<StudyDTO> listFromMe(PageRequestDTO pageRequestDTO, String memberId);
     public PageResponseDTO<StudyDTO> listToMe(PageRequestDTO pageRequestDTO, String memberId);
     public Map<String, Object> view(int idx, String memberId);
+    public Map<String, Object> viewForShare(int idx, String sharedMemberId);
     public MemberDTO selectMember(String memberId, String sessionId);
     public int registStudy(StudyDTO studyDTO, List<StudySubDTO> sharedList, FileDTO fileDTO);
     public int modifyStudy(StudyDTO studyDTO, List<StudySubDTO> sharedList, FileDTO fileDTO);
@@ -20,4 +21,5 @@ public interface StudyServiceIf {
     public void deleteShare(String idx);
     public void deleteLikes(String idx);
     public int likeStudy(String idx, String memberId, String memberName);
+    public int likeStudy2(String idx, String memberId, String memberName);
 }

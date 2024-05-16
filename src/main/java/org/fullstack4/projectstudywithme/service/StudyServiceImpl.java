@@ -110,6 +110,43 @@ public class StudyServiceImpl implements StudyServiceIf {
     }
 
     @Override
+    public Map<String, Object> viewForShare(int idx, String sharedMemberId) {
+        Map<String, Object> map = new HashMap<>();
+        StudyDTO studyDTO = new StudyDTO();
+        List<StudySubDTO> sharedDTOList = null;
+        List<StudySubDTO> likedDTOList = null;
+        StudyEntity studyEntity = studyRepository.findAllByIdx(idx);
+        List<SharedEntity> sharedEntityList = sharedRepository.findAllByStudyIdx(idx);
+        List<String> sharedMemberList = new ArrayList<>();
+        sharedEntityList.forEach(dto -> {sharedMemberList.add(dto.getMemberId());});
+        List<LikeEntity> likeEntityList = likeRepository.findAllByStudyIdx(idx);
+        if (studyEntity != null) {
+            if(sharedMemberList.contains(sharedMemberId)) {
+                studyDTO = modelMapper.map(studyEntity, StudyDTO.class);
+                studyDTO.setDate();
+                studyDTO.setCategories();
+                studyDTO.setTagsArr();
+                if(sharedEntityList != null) {
+                    sharedDTOList = sharedEntityList.stream().map(entity -> modelMapper.map(entity, StudySubDTO.class)).toList();
+                    sharedDTOList.forEach(StudySubDTO::setDate);
+                }
+                if(likeEntityList != null) {
+                    likedDTOList = likeEntityList.stream().map(entity -> modelMapper.map(entity, StudySubDTO.class)).toList();
+                    likedDTOList.forEach(StudySubDTO::setDate);
+                }
+            } else {
+                studyDTO.setMessage("공유 받은 게시글만 조회할 수 있습니다.");
+            }
+        } else {
+            studyDTO.setMessage("없는 게시글 입니다.");
+        }
+        map.put("studyDTO", studyDTO);
+        map.put("sharedDTOList", sharedDTOList);
+        map.put("likedDTOList", likedDTOList);
+        return map;
+    }
+
+    @Override
     public MemberDTO selectMember(String memberId, String sessionId) {
         MemberDTO memberDTO = new MemberDTO();
         MemberEntity memberEntity = memberRepository.findAllByMemberIdAndStatusEquals(memberId, "Y");
@@ -274,6 +311,24 @@ public class StudyServiceImpl implements StudyServiceIf {
         int result = likeRepository.save(likeEntity).getIdx();
         if(result > 0) {
             Map<String, Object> orgMap = view(Integer.parseInt(idx), memberId);
+            StudyDTO studyDTO = (StudyDTO) orgMap.get("studyDTO");
+            studyDTO.setLikePlus1();
+            StudyEntity studyEntity = modelMapper.map(studyDTO, StudyEntity.class);
+            studyRepository.save(studyEntity);
+        }
+        return result;
+    }
+
+    @Override
+    public int likeStudy2(String idx, String memberId, String memberName) {
+        LikeEntity likeEntity = LikeEntity.builder()
+                .studyIdx(Integer.parseInt(idx))
+                .memberId(memberId)
+                .memberName(memberName)
+                .build();
+        int result = likeRepository.save(likeEntity).getIdx();
+        if(result > 0) {
+            Map<String, Object> orgMap = viewForShare(Integer.parseInt(idx), memberId);
             StudyDTO studyDTO = (StudyDTO) orgMap.get("studyDTO");
             studyDTO.setLikePlus1();
             StudyEntity studyEntity = modelMapper.map(studyDTO, StudyEntity.class);

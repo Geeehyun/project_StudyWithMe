@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.fullstack4.projectstudywithme.Common.CommonUtil;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,6 +64,6 @@ public class StudyDTO {
         }
     }
     public void setLikePlus1() {
-        this.likes = String.valueOf((Integer.parseInt(this.likes) + 1));
+        this.likes = String.valueOf((CommonUtil.parseInt(this.likes) + 1));
     }
 }

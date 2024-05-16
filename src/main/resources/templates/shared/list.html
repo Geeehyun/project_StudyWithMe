@@ -14,21 +14,22 @@
         <section id="contact" class="contact mb-5">
             <div class="container" data-aos="fade-up">
                 <div class="form mt-1">
-                    <form action="/login/findPwd" method="post" role="form" class="php-email-form">
+                    <form role="form" class="php-email-form">
+                        <input type="hidden" name="type" th:value="${param.type == null or param.type.isEmpty()}? 'toMe' : ${param.type}">
+                        <input type="hidden" name="page_size" th:value="${param.page_size == null or param.page_size.isEmpty()}? 10 : ${param.page_size}">
                         <label class="p-2">기간</label>
                         <div class="form-group d-flex align-items-center">
-                            <input type="date" class="form-control w-25" name="start-date" id="start-date">
+                            <input type="date" class="form-control w-25" name="date1" id="start-date" th:value="${param.date1}">
                             <span class="pe-3 ps-3"> ~ </span>
-                            <input type="date" class="form-control w-25" name="end-date" id="end-date">
+                            <input type="date" class="form-control w-25" name="date2" id="end-date" th:value="${param.date2}">
                         </div>
                         <label class="p-2">키워드</label>
                         <div class="form-group d-flex">
-                            <select class="form-select w-25" aria-label="Default select example">
-                                <option>전체</option>
-                                <option value="1">제목</option>
-                                <option value="2">글내용</option>
+                            <select class="form-select w-25" aria-label="Default select example" name="search_type">
+                                <option value="t" th:selected="${param.search_type != null and param.search_type.toString().equals('t')}" >제목</option>
+                                <option value="c" th:selected="${param.search_type != null and param.search_type.toString().equals('c')}" >글내용</option>
                             </select>
-                            <input type="text" class="form-control w-75" name="keyword" id="keyword" placeholder="키워드" required>
+                            <input type="text" class="form-control w-75" name="search_word" id="search_word" placeholder="키워드" th:value="${param.search_word}">
                         </div>
                         <div class="text-center"><button type="submit">검색</button></div>
                     </form>
@@ -38,14 +39,14 @@
                 <div class="p-2 bg-white mt-3">
                     <div class="d-flex justify-content-between mb-2">
                         <div>
-                            <button type="button" class="btn btn-light">내가 한 공유</button>
-                            <button type="button" class="btn btn-primary">내가 받은 공유</button>
+                            <button type="button" data-value="toMe" class="btn" th:classappend="${param.type == null or param.type.toString().equals('toMe')} ? 'btn-primary' : 'btn-light'"  onclick="changeType(this)">내가 받은 공유</button>
+                            <button type="button" data-value="fromMe" class="btn" th:classappend="${param.type != null and param.type.toString().equals('fromMe')} ? 'btn-primary' : 'btn-light'"  onclick="changeType(this)">내가 한 공유</button>
                         </div>
                         <div class="d-flex align-items-center w-auto">
-                            <select class="form-select" aria-label="Default select example">
-                                <option value="10">10개씩 보기</option>
-                                <option value="30">30개씩 보기</option>
-                                <option value="50">50개씩 보기</option>
+                            <select class="form-select" aria-label="Default select example" name="page_size" onchange="modifyPageSize(this);">
+                                <option value="10" th:selected="${param.page_size != null and param.page_size.toString().equals('10')}">10개씩 보기</option>
+                                <option value="30" th:selected="${param.page_size != null and param.page_size.toString().equals('30')}">30개씩 보기</option>
+                                <option value="50" th:selected="${param.page_size != null and param.page_size.toString().equals('50')}">50개씩 보기</option>
                             </select>
                         </div>
                     </div>
@@ -53,7 +54,8 @@
                         <colgroup>
                             <col style="width: 5%">
                             <col style="width: 40%">
-                            <col style="width: 30%">
+                            <col style="width: 20%">
+                            <col style="width: 20%">
                             <col style="width: 15%">
                         </colgroup>
                         <thead class="table-secondary">
@@ -61,37 +63,171 @@
                             <th class="text-center bg-primary text-white" scope="col">No</th>
                             <th class="text-center bg-primary text-white" scope="col">제목</th>
                             <th class="text-center bg-primary text-white" scope="col">공유자</th>
+                            <th class="text-center bg-primary text-white" scope="col">공유기간</th>
                             <th class="text-center bg-primary text-white" scope="col">등록일</th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr style="cursor: pointer" onclick="location.href = '/shared/view?idx=1'">
-                                <th class="text-center" scope="row">1</th>
-                                <td class="text-center">제목입니다.</td>
-                                <td class="text-center">
-                                    <span class="d-block">장지현 (2024-05-13 00:00:00)</span>
+                        <th:block th:if="${pageResponseDTO.dtoList != null && pageResponseDTO.dtoList.size() != 0}">
+                            <tr th:each="dtoList, status : ${pageResponseDTO.dtoList}" th:with="i=${pageResponseDTO.total_count} - (${pageResponseDTO.page_size} * ${pageResponseDTO.page - 1})">
+                                <th class="text-center align-middle" scope="row" th:text="${i} - ${status.index}">1</th>
+                                <td class="text-center align-middle"  style="cursor: pointer" th:data-idx="${dtoList.idx}" onclick="view(this)">
+                                    <div class="w-100 d-flex gap-2 align-items-center">
+                                        <img class="w-25 rounded-2" th:src="${dtoList.thumbnailPath}+${dtoList.thumbnail}">
+                                        <span th:text="${dtoList.title}"></span>
+                                    </div>
                                 </td>
-                                <td class="text-center">2024-05-13</td>
+                                <td class="text-center align-middle">
+                                    <span class="d-block" th:text="${dtoList.memberName}">장지현 (2024-05-13 00:00:00)</span>
+                                </td>
+                                <td class="text-center align-middle" th:text="${dtoList.displayStartDateToString} + '~' + ${dtoList.displayEndDateToString}"></td>
+                                <td class="text-center align-middle" th:text="${dtoList.regDateToString}">2024-05-13</td>
                             </tr>
+                        </th:block>
+                        <th:block th:unless="${pageResponseDTO.dtoList != null && pageResponseDTO.dtoList.size() != 0}">
+                            <tr>
+                                <td class="text-center" colspan="5">게시글이 없습니다.</td>
+                            </tr>
+                        </th:block>
                         </tbody>
                     </table>
+                    <div class="text-end">
+                        <button th:if="${param.type != null and param.type.toString().equals('fromMe')}" type="button" class="btn btn-primary" onclick="location.href = '/mystudy/regist'">학습 등록</button>
+                    </div>
                     <div class="text-center py-4">
                         <div class="custom-pagination">
-                            <a href="#" class="prev">◀</a>
-                            <a href="#" class="active">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#">4</a>
-                            <a href="#">5</a>
-                            <a href="#" class="next">▶</a>
+                            <a class="prev" th:classappend="${!pageResponseDTO.prev_page_flag} ? 'disabled'" th:data-page="${pageResponseDTO.prev_page_flag} ? (${pageResponseDTO.page} - ${pageResponseDTO.page_block_size} >= 1 ? ${pageResponseDTO.page} - ${pageResponseDTO.page_block_size} : 1)"  th:onclick="${pageResponseDTO.prev_page_flag} ? 'pageLink(this)'">◀</a>
+                            <a th:each="i:${#numbers.sequence(pageResponseDTO.page_block_start, pageResponseDTO.page_block_end)}" th:data-page="${i}" th:text="${i}" th:class="${pageResponseDTO.page == i} ? 'active'" onclick="pageLink(this)" ></a>
+                            <a class="prev" th:classappend="${!pageResponseDTO.next_page_flag} ? 'disabled'" th:data-page="${pageResponseDTO.next_page_flag} ? (${pageResponseDTO.page} - ${pageResponseDTO.page_block_size} <= ${pageResponseDTO.total_page} ? ${pageResponseDTO.page} + ${pageResponseDTO.page_block_size} : ${pageResponseDTO.total_page})" th:onclick="${pageResponseDTO.next_page_flag} ? 'pageLink(this)'">▶</a>
                         </div>
                     </div>
 
                 </div>
             </div>
         </section>
-
     </main><!-- End #main -->
 </div>
+<script layout:fragment="script" th:inline="javascript">
+    // 페이지 개수 보기
+    function modifyPageSize(element) {
+        let pageSize = element.value;
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let type = [[${param.type}]];
+        let queryString = "?page_size=" + pageSize;
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (type != null) {
+            queryString += "&type=" + type;
+        }
+        location.href = '/shared/list' + queryString;
+    }
+
+    function changeType(element) {
+        let type = element.dataset.value;
+        let page = [[${param.page}]];
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let pageSize = [[${param.page_size}]]
+        let queryString = "?type=" + type;
+        if (page != null) {
+            queryString += "&page=" + page;
+        }
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (pageSize != null) {
+            queryString += "&page_size=" + pageSize;
+        }
+        location.href = '/shared/list' + queryString;
+    }
+
+    function pageLink(element) {
+        let page = element.dataset.page;
+        let type = [[${param.type}]];
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let pageSize = [[${param.page_size}]]
+        let queryString = "?page=" + page;
+        if (type != null) {
+            queryString += "&type=" + type;
+        }
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (pageSize != null) {
+            queryString += "&page_size=" + pageSize;
+        }
+        location.href = '/shared/list' + queryString;
+    }
+
+    function view(element) {
+        let idx = element.dataset.idx;
+        let type = [[${param.type}]];
+        let page = [[${param.page}]];
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let pageSize = [[${param.page_size}]]
+        let queryString = "?idx=" + idx;
+        if (type != null) {
+            queryString += "&type=" + type;
+        }
+        if (page != null) {
+            queryString += "&page=" + page;
+        }
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (pageSize != null) {
+            queryString += "&page_size=" + pageSize;
+        }
+        location.href = '/shared/view' + queryString;
+    }
+</script>
 </body>
 </html>

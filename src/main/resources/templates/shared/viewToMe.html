@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/header.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>MyStudy</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <main id="main">
+        <section id="contact" class="contact mb-5">
+            <div class="container" data-aos="fade-up">
+                <div class="p-2 bg-white mt-3">
+                    <div class="mb-3 text-end">
+                        <button type="button" class="btn btn-light" th:disabled="${likeMemberList.contains(session.memberDTO.memberId.toString())}" th:data-idx="${studyDTO.idx}" onclick="likeThis(this)"><i class="bi bi-heart-fill" th:classappend="${likeMemberList.contains(session.memberDTO.memberId.toString())} ? 'text-danger'"></i>&nbsp;좋아요</button>
+                    </div>
+                    <table class="table border bg-white">
+                        <colgroup>
+                            <col span="4" class="w-25">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="row">제목</th>
+                            <td class="text-start" colspan="3" th:text="${studyDTO.title}">제목입니다.</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="row">등록일</th>
+                            <td class="text-center" th:text="${studyDTO.regDateToString}">2024-05-13</td>
+                            <th class="text-center bg-primary text-white" scope="row">좋아요</th>
+                            <td class="text-center"><span id="likeCnt" th:text="${studyDTO.likes}"></span></td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="row">오늘의 학습 노출기간</th>
+                            <td colspan="3" th:text="${studyDTO.displayStartDateToString} + ' ~ ' + ${studyDTO.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="row">분야</th>
+                            <td class="text-start" colspan="3" th:text="${studyDTO.category}">맛집, 식당</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white" scope="row">해쉬태그</th>
+                            <td class="text-start" colspan="3">
+                                <span class="badge bg-primary-light me-1" th:each="tag :${studyDTO.tagsArr}" th:text="${tag}">#태그1</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white align-middle" scope="row">공유자</th>
+                            <td class="align-middle" colspan="3" th:text="${studyDTO.memberName}">내용</td>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-primary text-white align-middle" scope="row">썸네일</th>
+                            <th class="text-center bg-primary text-white align-middle" scope="row" colspan="3">내용</th>
+                        </tr>
+                        <tr>
+                            <td class="text-start border align-middle">
+                                <img class="rounded" width="100%" th:src="${studyDTO.thumbnailPath} + ${studyDTO.thumbnail}">
+                            </td>
+                            <td class="text-start overflow-y-scroll" colspan="3" style="height: 300px" th:text="${studyDTO.content}">
+                                내용입니다.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="button" class="btn btn-primary" onclick="listLink()">목록</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main><!-- End #main -->
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    function listLink() {
+        let page = [[${param.page != null} ? ${param.page} : 1]];
+        let page_size = [[${param.page_size}]];
+        let search_type = [[${param.search_type}]];
+        let search_word = [[${param.search_word}]];
+        let date1 = [[${param.date1}]];
+        let date2 = [[${param.date2}]];
+        let type = [[${param.type}]];
+        let queryString = "?page=" + page;
+        if (page_size != null) {
+            queryString += "&page_size=" + page_size;
+        }
+        if (search_type != null) {
+            queryString += "&search_type=" + search_type;
+        }
+        if (search_word != null) {
+            queryString += "&search_word=" + search_word;
+        }
+        if (date1 != null) {
+            queryString += "&date1=" + date1;
+        }
+        if (date2 != null) {
+            queryString += "&date2=" + date2;
+        }
+        if (type != null) {
+            queryString += "&type=" + type;
+        }
+        location.href = '/shared/list' + queryString;
+    }
+    function likeThis(element) {
+        let idx = element.dataset.idx;
+        $.ajax({
+            url: "/shared/like",
+            method: 'post',
+            dataType : 'json',
+            data : {
+                "idx" : idx
+            },
+            success: function (data) {
+                console.log(data);
+                alert(data.message);
+                if(data.result == "success") {
+                    element.setAttribute("disabled", "disabled");
+                    element.firstChild.classList.add("text-danger");
+                    let likeCnt = document.getElementById('likeCnt').innerText;
+                    document.getElementById('likeCnt').innerText = (String)(parseInt(likeCnt) + 1);
+                }
+            },
+            error : function(xhr, status, error) {
+                console.log("xhr! : " + xhr);
+                console.log("status! : " + status);
+                console.log("error! : " + error);
+            }
+        })
+    }
+</script>
+</body>
+</html>

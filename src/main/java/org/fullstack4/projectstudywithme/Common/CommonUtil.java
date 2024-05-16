@@ -38,6 +38,8 @@ public class CommonUtil {
             result = Integer.parseInt(str);
         } catch (NumberFormatException e) {
             System.out.println("숫자가 아닌 값 들어옴.");
+        } catch (Exception e) {
+            System.out.println("숫자가 아닌 값 들어옴222.");
         }
         return result;
     }

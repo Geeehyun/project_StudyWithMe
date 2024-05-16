@@ -15,6 +15,7 @@ import javax.swing.text.DateFormatter;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -47,7 +48,8 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
             query.where(qStudy.regDate.goe(LocalDate.parse(date1, DateTimeFormatter.ISO_DATE).atStartOfDay()));
         }
         if(date2 != null && !date2.isEmpty()) {
-            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atStartOfDay()));
+            LocalTime time = LocalTime.of(23, 59);
+            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atTime(time)));
         }
         query.where(qStudy.idx.gt(0));
 
@@ -85,7 +87,8 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
             query.where(qStudy.regDate.goe(LocalDate.parse(date1, DateTimeFormatter.ISO_DATE).atStartOfDay()));
         }
         if(date2 != null && !date2.isEmpty()) {
-            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atStartOfDay()));
+            LocalTime time = LocalTime.of(23, 59);
+            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atTime(time)));
         }
         query.where(qStudy.idx.gt(0));
         //paging
@@ -123,7 +126,8 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
             query.where(qStudy.regDate.goe(LocalDate.parse(date1, DateTimeFormatter.ISO_DATE).atStartOfDay()));
         }
         if(date2 != null && !date2.isEmpty()) {
-            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atStartOfDay()));
+            LocalTime time = LocalTime.of(23, 59);
+            query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atTime(time)));
         }
         query.where(qStudy.idx.gt(0));
         //paging
