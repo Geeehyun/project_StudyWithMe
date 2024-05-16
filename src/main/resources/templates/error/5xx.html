@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/header.html}"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <main id="main">
+        <section id="contact" class="contact mb-5">
+            <div class="container" data-aos="fade-up">
+                <div class="mt-1 bg-white rounded-2 shadow text-center p-4">
+                    <h3>😰잘못된 요청으로 인해 문제가 발생하였습니다.😰</h3>
+                    <p>메인화면으로 다시 돌아가 다시 시도해주세요<br>불편함을 드려 죄송합니다.</p>
+                    <p>동일 문제 발생 시 현재 화면을 캡쳐하여 문의 부탁드립니다.</p>
+                    <img class="w-25" src="/img/error.png">
+                    <div class="w-100 p-3 bg-white rounded-4 border text-center overflow-y-scroll" style="height: 250px;">
+                        <ul class="w-100 list-unstyled text-start">
+                            <li th:text="|timestamp: ${timestamp}|"></li>
+                            <li th:text="|path: ${path}|"></li>
+                            <li th:text="|status: ${status}|"></li>
+                            <li th:text="|message: ${message}|"></li>
+                            <li th:text="|error: ${error}|"></li>
+                            <li th:text="|exception: ${exception}|"></li>
+                            <li th:text="|errors: ${errors}|"></li>
+                            <li th:text="|trace: ${trace}|"></li>
+                        </ul>
+                    </div>
+                    <br>
+                    <button class="btn btn-dark" onclick="location.replace('/main/main')">메인화면 가기</button>
+                </div><!-- End Contact Form -->
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+</div>
+</body>
+</html>
