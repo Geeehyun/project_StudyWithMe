@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<MemberEntity, String> {
     MemberEntity findAllByMemberId(String memberID);
     MemberEntity findAllByMemberIdAndStatusEquals(String memberId, String status);
+    long countAllByMemberId(String memberId);
+    long countAllByEmail(String email);
 }

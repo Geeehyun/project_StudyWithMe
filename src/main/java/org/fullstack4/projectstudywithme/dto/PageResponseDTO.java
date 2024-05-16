@@ -48,6 +48,13 @@ public class PageResponseDTO<E> {
         this.next_page_flag = (this.total_page > this.page_block_end);
         this.dtoList = dtoList;
 
+        this.search_type = pageRequestDTO.getSearch_type();
+        this.search_types = pageRequestDTO.getSearch_types();
+        this.search_word = pageRequestDTO.getSearch_word();
+        this.date1 = pageRequestDTO.getDate1();
+        this.date2 = pageRequestDTO.getDate2();
+        this.orderType = pageRequestDTO.getOrderType();
+
         this.linkParams = "?page_size="+this.page_size;
 
     }

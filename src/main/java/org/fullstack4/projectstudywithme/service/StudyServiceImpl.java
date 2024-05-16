@@ -37,6 +37,7 @@ public class StudyServiceImpl implements StudyServiceIf {
         List<StudyDTO> dtoList = result.getContent().stream()
                 .map(entity->modelMapper.map(entity, StudyDTO.class))
                 .collect(Collectors.toList());
+        dtoList.forEach(dto -> {dto.setDate();dto.setCategories();dto.setTagsArr();});
 
         return PageResponseDTO.<StudyDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
@@ -51,6 +52,7 @@ public class StudyServiceImpl implements StudyServiceIf {
         List<StudyDTO> dtoList = result.getContent().stream()
                 .map(entity->modelMapper.map(entity, StudyDTO.class))
                 .collect(Collectors.toList());
+        dtoList.forEach(dto -> {dto.setDate();dto.setCategories();dto.setTagsArr();});
 
         return PageResponseDTO.<StudyDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
@@ -65,6 +67,7 @@ public class StudyServiceImpl implements StudyServiceIf {
         List<StudyDTO> dtoList = result.getContent().stream()
                 .map(entity->modelMapper.map(entity, StudyDTO.class))
                 .collect(Collectors.toList());
+        dtoList.forEach(dto -> {dto.setDate();dto.setCategories();dto.setTagsArr();});
 
         return PageResponseDTO.<StudyDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)

@@ -12,10 +12,7 @@ import org.fullstack4.projectstudywithme.service.MemberServiceIf;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -166,5 +163,19 @@ public class MemberController {
             redirectAttributes.addFlashAttribute("result", "변경실패");
         }
         return "redirect:/mypage/mypage";
+    }
+
+    @RequestMapping(value = "/checkId", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+    @ResponseBody
+    public String checkId(String memberId) {
+        String result = String.valueOf(memberServiceIf.checkId(memberId));
+        return result;
+    }
+
+    @RequestMapping(value = "/checkEmail", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+    @ResponseBody
+    public String checkEmail(String email) {
+        String result = String.valueOf(memberServiceIf.checkEmail(email));
+        return result;
     }
 }

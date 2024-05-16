@@ -13,55 +13,35 @@
   <main id="main">
     <!-- ======= Culture Category Section ======= -->
     <section class="category-section">
-      <div class="container" data-aos="fade-up">
+      <div class="container">
         <div class="row">
-          <div class="col-md-1">
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-primary text-center">월요일</button>
+          <div class="col-md-1 text-center d-flex flex-column gap-1">
+            <button class="btn btn-primary m-0" onclick="changeDateToWeek('prev')"><i class="bi bi-caret-up"></i></button>
+            <div id="dateList" class="m-0 h-auto">
             </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">화요일</button>
-            </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">수요일</button>
-            </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">목요일</button>
-            </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">금요일</button>
-            </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">토요일</button>
-            </div>
-            <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-light">일요일</button>
-            </div>
+            <button class="btn btn-primary m-0" onclick="changeDateToWeek('next')"><i class="bi bi-caret-down"></i></button>
           </div>
           <div class="col-md-11">
-            <div class="row">
+            <div class="row" style="height: 90%">
               <div class="col-lg-8">
+                <div class="position-relative d-flex justify-content-between mb-1">
+                  <h3 id="date1Label" for="date1" class="text-primary fw-bold " th:text="${pageResponseDTO.date2}">2024-05-16</h3>
+                  <input id="date1" name="date1" type="text" class="hide" th:value="${pageResponseDTO.date2}" onchange="changeDate(this)">
+                  <button class="btn btn-primary m-0" onclick="changeDateToWeek('today')">오늘</button>
+                </div>
                 <section id="hero-slider" class="hero-slider p-0">
-                  <div class="container-md" data-aos="fade-in">
+                  <div class="container-md" >
                     <div class="row rounded overflow-hidden ">
+                      <th:block th:if="${!pageResponseDTO.dtoList.isEmpty()}">
                         <div class="swiper sliderFeaturedPosts">
                           <div class="swiper-wrapper">
-                            <div class="swiper-slide">
+                            <div class="swiper-slide" th:each="dtoList : ${pageResponseDTO.dtoList}">
                               <div class="post-entry-1">
-                                <a href="/views/single-post.html"><img src="/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                <h2 class="mb-2"><a href="/views/single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                                <span class="author mb-3 d-block">Jenny Wilson</span>
-                                <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                              </div>
-                            </div>
-                            <div class="swiper-slide">
-                              <div class="post-entry-1">
-                                <a href="/views/single-post.html"><img src="/img/post-landscape-2.jpg" alt="" class="img-fluid"></a>
-                                <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                                <h2 class="mb-2"><a href="/views/single-post.html">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
-                                <span class="author mb-3 d-block">Jenny Wilson</span>
-                                <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
+                                <a th:href="'/mystudy/view?idx='+${dtoList.idx}"><img th:src="${dtoList.thumbnailPath}+${dtoList.thumbnail}" alt="" class="img-fluid"></a>
+                                <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
+                                <h2 class="mb-2"><a th:href="'/mystudy/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
+                                <div class="post-meta"><span class="me-1" th:each="tag : ${dtoList.tagsArr}" th:text="'#'+${tag}">Culture</span> </div>
+                                <p class="mb-4 d-block" th:classappend="'review'" th:text="${dtoList.content}"></p>
                               </div>
                             </div>
                           </div>
@@ -74,41 +54,131 @@
 
                           <div class="swiper-pagination"></div>
                         </div>
+                      </th:block>
+                      <th:block th:unless="${!pageResponseDTO.dtoList.isEmpty()}">
+                        <div class="card card-body mt-1 text-center p-5 d-flex justify-content-center align-items-center">
+                          <p class="m-0">아직 등록한 학습내용이 없습니다.</p>
+                          <button type="button" class="btn btn-primary w-25 text-center mt-3" onclick="location.href = '/mystudy/regist'">학습 등록하러 가기</button>
+                        </div>
+                      </th:block>
                       </div>
                   </div>
                 </section><!-- End Hero Slider Section -->
               </div>
-              <div class="col-lg-4">
-                <div class="post-entry-1 rounded border border-primary p-3">
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="#">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                  <p class="mb-4 d-block">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                  <span class="author mb-3 d-block"><i class="bi bi-heart-fill"></i> 100</span>
+              <div class="col-lg-4 border-start h-100">
+                <div class="d-flex flex-column">
+                <div class="post-entry-1 rounded border border-primary p-3" th:each="dtoList : ${sharedPageDTO.dtoList}">
+                  <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
+                  <h2 class="mb-2"><a th:href="'/shared/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
+                  <span class="author mb-3 d-block" th:text="${dtoList.memberName}">Jenny Wilson</span>
+                  <p class="mb-4 d-block" th:text="${dtoList.content}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
+                  <span class="author mb-3 d-block"><i class="bi bi-heart-fill"></i>&nbsp;<span th:text="${dtoList.likes}"></span></span>
                 </div>
-                <div class="post-entry-1 rounded border border-primary p-3">
-                  <div class="post-meta"><span class="date">Culture</span> <span class="mx-1">&bullet;</span> <span>Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a href="#">5 Great Startup Tips for Female Founders</a></h2>
-                  <span class="author mb-3 d-block">Jenny Wilson</span>
-                  <span class="author mb-3 d-block"><i class="bi bi-heart-fill"></i> 100</span>
+                <button class="btn btn-light border-primary" onclick="location.href = '/shared/list'">더 보러 가기</button>
                 </div>
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
     </section><!-- End Culture Category Section -->
   </main><!-- End #main -->
   </div>
   <!-- ======= Footer ======= -->
-
-
   <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-
-
 </body>
+<script layout:fragment="script" th:inline="javascript">
+  $( function() {
+    $( "#date1" ).datepicker();
+    $( "#date1" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+  } );
+  /*
+  * <div class="post-entry-1 text-center">
+              <button type="button" class="btn btn-primary text-center">월요일</button>
+            </div>
+  *
+  * */
+  window.onload = ()=>{
+    let date1 = [[${pageResponseDTO.date1}]];
+    getDates(date1);
+  };
 
+  function getDates(targetDate) {
+    let targetDateObj = new Date(targetDate);
+    let days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+    let parentEl = document.getElementById('dateList');
+    for(let i = 4; i >= 0; i--) {
+      let dd = new Date(targetDate);
+      dd.setDate(targetDateObj.getDate() -i);
+      let ddDate = dd.getFullYear() + '-' + ((dd.getMonth()+1) < 10 ? '0' + (dd.getMonth()+1) : (dd.getMonth()+1)) + '-' + (dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate());
+      let divEl = document.createElement('div');
+      let buttonEl = document.createElement('button');
+      divEl.classList.add('mb-3', 'text-center');
+      buttonEl.type = 'button';
+      buttonEl.classList.add('btn', 'text-center');
+      if(i==0) {
+        buttonEl.classList.add('btn-primary');
+      } else {
+        buttonEl.classList.add('btn-light');
+      }
+      buttonEl.dataset.date = ddDate;
+      buttonEl.innerText = `${days[dd.getDay()]}
+      ${dd.getMonth()+1}/${dd.getDate()}`;
+      buttonEl.addEventListener('click', ()=>{
+        changeDateToClick(buttonEl)
+      })
+      divEl.append(buttonEl);
+      parentEl.append(divEl);
+    }
+    for(let i = 1; i < 3; i++) {
+      let dd = new Date(targetDate);
+      dd.setDate(targetDateObj.getDate() +i);
+      let ddDate = dd.getFullYear() + '-' + ((dd.getMonth()+1) < 10 ? '0' + (dd.getMonth()+1) : (dd.getMonth()+1)) + '-' + (dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate());
+      let divEl = document.createElement('div');
+      let buttonEl = document.createElement('button');
+      divEl.classList.add('mb-3', 'text-center');
+      buttonEl.type = 'button';
+      buttonEl.classList.add('btn', 'text-center');
+      if(i==0) {
+        buttonEl.classList.add('btn-primary');
+      } else {
+        buttonEl.classList.add('btn-light');
+      }
+      buttonEl.dataset.date = ddDate;
+      buttonEl.innerText = `${days[dd.getDay()]}
+      ${dd.getMonth()+1}/${dd.getDate()}`;
+      buttonEl.addEventListener('click', ()=>{
+        changeDateToClick(buttonEl)
+      })
+      divEl.append(buttonEl);
+      parentEl.append(divEl);
+    }
+  }
+
+  function changeDate(element) {
+    let targetDate = element.value;
+    $('#date1Label').text(targetDate);
+    location.href = "/main/main?date1=" + targetDate + "&date2=" + targetDate;
+  }
+
+  function changeDateToClick(element) {
+    let targetDate = element.dataset.date;
+    location.href = "/main/main?date1=" + targetDate + "&date2=" + targetDate;
+  }
+  function changeDateToWeek(destination) {
+    let date1 = [[${pageResponseDTO.date1}]];
+    let targetDateObj = new Date(date1);
+    let dd = new Date(date1);
+    if (destination == 'next') {
+      dd.setDate(targetDateObj.getDate() +7);
+    } else if (destination == 'prev') {
+      dd.setDate(targetDateObj.getDate() -7);
+    } else {
+      let today = new Date();
+      dd = today;
+    }
+    let ddDate = dd.getFullYear() + '-' + ((dd.getMonth()+1) < 10 ? '0' + (dd.getMonth()+1) : (dd.getMonth()+1)) + '-' + (dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate());
+    location.href = "/main/main?date1=" + ddDate + "&date2=" + ddDate;
+  }
+</script>
 </html>

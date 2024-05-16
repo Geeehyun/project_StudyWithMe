@@ -10,5 +10,7 @@ public interface MemberServiceIf {
     int updatePwdToTemp(String memberId);
     int updatePwdToNew(String memberId, String oldPwd, String newPwd);
     int updateMember(MemberDTO newMemberDTO);
-    int leaveMember(String memberID);
+    int leaveMember(String memberId);
+    int checkId(String memberId);
+    int checkEmail(String email);
 }

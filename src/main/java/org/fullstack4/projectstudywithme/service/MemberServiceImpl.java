@@ -12,7 +12,6 @@ import org.fullstack4.projectstudywithme.domain.MemberEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Log4j2
 @Service
@@ -108,11 +107,23 @@ public class MemberServiceImpl implements MemberServiceIf {
     }
 
     @Override
-    public int leaveMember(String memberID) {
-        MemberEntity memberEntity = memberRepository.findAllByMemberId(memberID);
+    public int leaveMember(String memberId) {
+        MemberEntity memberEntity = memberRepository.findAllByMemberId(memberId);
         memberEntity.setStatus("N");
         memberEntity.setLeave_date(LocalDateTime.now());
         int idx = memberRepository.save(memberEntity).getIdx();
         return idx;
+    }
+
+    @Override
+    public int checkId(String memberId) {
+        int result = (int) memberRepository.countAllByMemberId(memberId);
+        return result;
+    }
+
+    @Override
+    public int checkEmail(String email) {
+        int result = (int) memberRepository.countAllByEmail(email);
+        return result;
     }
 }
