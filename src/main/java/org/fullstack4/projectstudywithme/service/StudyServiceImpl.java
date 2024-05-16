@@ -77,6 +77,21 @@ public class StudyServiceImpl implements StudyServiceIf {
     }
 
     @Override
+    public PageResponseDTO<StudyDTO> listTodayStudy(PageRequestDTO pageRequestDTO, String memberId) {
+        Page<StudyEntity> result = studyRepository.searchTodayStudy(pageRequestDTO, memberId);
+        List<StudyDTO> dtoList = result.getContent().stream()
+                .map(entity->modelMapper.map(entity, StudyDTO.class))
+                .collect(Collectors.toList());
+        dtoList.forEach(dto -> {dto.setDate();dto.setCategories();dto.setTagsArr();});
+
+        return PageResponseDTO.<StudyDTO>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total_count((int)result.getTotalElements())
+                .build();
+    }
+
+    @Override
     public Map<String, Object> view(int idx, String memberID) {
         Map<String, Object> map = new HashMap<>();
         StudyDTO studyDTO = new StudyDTO();

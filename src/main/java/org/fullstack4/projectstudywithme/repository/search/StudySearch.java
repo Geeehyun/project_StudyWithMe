@@ -9,4 +9,5 @@ public interface StudySearch {
     Page<StudyEntity> searchMyStudy(PageRequestDTO pageRequestDTO, String memberId);
     Page<StudyEntity> searchSharedFromMe(PageRequestDTO pageRequestDTO, String memberId);
     Page<StudyEntity> searchSharedToMe(PageRequestDTO pageRequestDTO, String memberId);
+    Page<StudyEntity> searchTodayStudy(PageRequestDTO pageRequestDTO, String memberId);
 }

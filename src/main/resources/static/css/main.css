@@ -1306,14 +1306,14 @@ section {
 }
 
 .review {
-  height: 200px;
-  overflow-y: scroll;
-  white-space: normal;
+  /* height: 200px; */
+  overflow: hidden;
+  /* white-space: nowrap; */
   text-overflow: ellipsis !important;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
-  word-break: keep-all;
+  /* word-break: keep-all; */
 }
 
 .hide {
@@ -1328,4 +1328,8 @@ section {
   color: transparent !important;
   background: transparent !important;
   border: 0 !important;
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
 }

@@ -11,6 +11,7 @@ public interface StudyServiceIf {
     public PageResponseDTO<StudyDTO> list(PageRequestDTO pageRequestDTO, String memberId);
     public PageResponseDTO<StudyDTO> listFromMe(PageRequestDTO pageRequestDTO, String memberId);
     public PageResponseDTO<StudyDTO> listToMe(PageRequestDTO pageRequestDTO, String memberId);
+    public PageResponseDTO<StudyDTO> listTodayStudy(PageRequestDTO pageRequestDTO, String memberId);
     public Map<String, Object> view(int idx, String memberId);
     public Map<String, Object> viewForShare(int idx, String sharedMemberId);
     public MemberDTO selectMember(String memberId, String sessionId);

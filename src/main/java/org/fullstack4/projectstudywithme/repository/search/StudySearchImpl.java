@@ -72,9 +72,11 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
         String date2 = pageRequestDTO.getDate2();
         PageRequest pageable = pageRequestDTO.getPageable(pageRequestDTO.getOrderType());
         QStudyEntity qStudy = QStudyEntity.studyEntity;
+        QSharedEntity qShared = QSharedEntity.sharedEntity;
         JPQLQuery<StudyEntity> query = from(qStudy);
+        query.join(qShared);
+        query.on(qShared.studyIdx.eq(qStudy.idx));
         query.where(qStudy.memberId.eq(memberId));
-        query.where(qStudy.displayYn.eq("Y"));
         if(type != null && !type.isEmpty()) {
             if(type.equals("t")) {
                 query.where(qStudy.title.like("%" + search_word + "%"));
@@ -111,8 +113,6 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
         JPQLQuery<StudyEntity> query = from(qStudy);
         query.join(qShared);
         query.on(qShared.studyIdx.eq(qStudy.idx));
-        query.where(qStudy.displayStartDate.goe(LocalDate.now()));
-        query.where(qStudy.displayEndDate.loe(LocalDate.now()));
         query.where(qShared.memberId.eq(memberId));
         if(type != null && !type.isEmpty()) {
             if(type.equals("t")) {
@@ -129,6 +129,28 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
             LocalTime time = LocalTime.of(23, 59);
             query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atTime(time)));
         }
+        query.where(qStudy.idx.gt(0));
+        //paging
+        this.getQuerydsl().applyPagination(pageable, query);
+        log.info("query : {}", query);
+        List<StudyEntity> studies = query.fetch();
+        int total = (int)query. fetchCount();
+        return new PageImpl<>(studies, pageable, total);
+    }
+
+    @Override
+    public Page<StudyEntity> searchTodayStudy(PageRequestDTO pageRequestDTO, String memberId) {
+        String type = pageRequestDTO.getSearch_type();
+        String search_word = pageRequestDTO.getSearch_word();
+        String date = pageRequestDTO.getDate();
+        PageRequest pageable = pageRequestDTO.getPageable(pageRequestDTO.getOrderType());
+        QStudyEntity qStudy = QStudyEntity.studyEntity;
+        QSharedEntity qShared = QSharedEntity.sharedEntity;
+        JPQLQuery<StudyEntity> query = from(qStudy);
+        query.where(qStudy.memberId.eq(memberId));
+        query.where(qStudy.displayYn.eq("Y"));
+        query.where(qStudy.displayStartDate.goe(LocalDate.parse(date)));
+        query.where(qStudy.displayEndDate.loe(LocalDate.parse(date)));
         query.where(qStudy.idx.gt(0));
         //paging
         this.getQuerydsl().applyPagination(pageable, query);

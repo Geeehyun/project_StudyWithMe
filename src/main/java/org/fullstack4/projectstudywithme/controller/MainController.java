@@ -28,19 +28,16 @@ public class MainController {
         if (session.getAttribute("memberDTO") != null) {
             MemberDTO sessionMemberDTO = (MemberDTO) session.getAttribute("memberDTO");
             String sessionId = sessionMemberDTO.getMemberId();
-            if(pageRequestDTO.getDate1() == null) {
+            if(pageRequestDTO.getDate() == null) {
                 String today = String.valueOf(LocalDate.now());
-                pageRequestDTO.setDate1(today);
-                pageRequestDTO.setDate2(today);
+                pageRequestDTO.setDate(today);
             }
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> pageRequestDTO : {}", pageRequestDTO);
-            PageResponseDTO<StudyDTO> myPageDTO = studyServiceIf.list(pageRequestDTO, sessionId);
+            PageResponseDTO<StudyDTO> myPageDTO = studyServiceIf.listTodayStudy(pageRequestDTO, sessionId);
             model.addAttribute("pageResponseDTO", myPageDTO);
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> myPageDTO : {}", myPageDTO);
 
-            pageRequestDTO.setDate1(null);
-            pageRequestDTO.setDate2(null);
-            pageRequestDTO.setPage_size(2);
+            pageRequestDTO.setPage_size(3);
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> pageRequestDTO : {}", pageRequestDTO);
             PageResponseDTO<StudyDTO> sharedPageDTO = studyServiceIf.listToMe(pageRequestDTO, sessionId);
             model.addAttribute("sharedPageDTO", sharedPageDTO);

@@ -32,7 +32,7 @@
                         </div>
                         <label class="p-2" for="memberName">NAME</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" data-name="이름" name="memberName" id="memberName" placeholder="NAME" >
+                            <input type="text" class="form-control" data-name="이름" name="memberName" id="memberName" placeholder="NAME" onkeyup="replaceName(this)">
                             <small id="err_memberName" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="pwd">PASSWORD</label>
@@ -50,7 +50,7 @@
                         </div>
                         <label class="p-2" for="phone">PHONE</label>
                         <div class="form-group">
-                            <input type="tel" class="form-control" data-name="핸드폰" name="phone" id="phone" placeholder="phone" >
+                            <input type="tel" class="form-control" data-name="핸드폰" name="phone" id="phone" placeholder="phone" onkeyup="replacePhone(this)">
                             <small id="err_phone" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="email">EMAIL</label>
@@ -89,14 +89,14 @@
             }
         }
         // 정규식 검사
-        if(!idRegCheck($('input[name=member_id]'))){
-            $('#err_member_id').text("아이디는 영문 소문자와 숫자로 최소 6글자 이상, 20글자 이하로 작성하세요");
-            $('input[name=member_id]').focus();
+        if(!idRegCheck($('input[name=memberId]'))){
+            $('#err_memberId').text("아이디는 영문 소문자와 숫자로 최소 6글자 이상, 20글자 이하로 작성하세요");
+            $('input[name=memberId]').focus();
             return false;
         }
-        if(!nameRegCheck($('input[name=member_name]'))){
-            $('#err_member_name').text("이름은 한글로 최소 2글자 이상, 20글자 이하로 작성하세요.");
-            $('input[name=member_name]').focus();
+        if(!nameRegCheck($('input[name=memberName]'))){
+            $('#err_memberName').text("이름은 한글로 최소 2글자 이상, 20글자 이하로 작성하세요.");
+            $('input[name=memberName]').focus();
             return false;
         }
         if(!passwordRegCheck($('input[name=pwd]'))){
@@ -130,7 +130,9 @@
             $('input[name=email]').focus();
             return false;
         }
-        document.querySelector('#frmJoin').submit();
+        if(confirm("제출하시겠습니까?")) {
+            document.querySelector('#frmJoin').submit();
+        }
     }
 
     function checkId() {

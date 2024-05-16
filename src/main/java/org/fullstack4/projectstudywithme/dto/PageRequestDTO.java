@@ -35,6 +35,7 @@ public class PageRequestDTO {
     private String search_type;
     private String[] search_types;
     private String search_word;
+    private String date;
     private String date1;
     private String date2;
     @Builder.Default

@@ -25,8 +25,8 @@
             <div class="row" style="height: 90%">
               <div class="col-lg-8">
                 <div class="position-relative d-flex justify-content-between mb-1">
-                  <h3 id="date1Label" for="date1" class="text-primary fw-bold " th:text="${pageResponseDTO.date2}">2024-05-16</h3>
-                  <input id="date1" name="date1" type="text" class="hide" th:value="${pageResponseDTO.date2}" onchange="changeDate(this)">
+                  <h3 id="date1Label" class="text-primary fw-bold text-decoration-underline cursor-pointer" th:text="${pageResponseDTO.date}">2024-05-16</h3>
+                  <input id="date" name="date" type="text" class="hide cursor-pointer" th:value="${pageResponseDTO.date}" onchange="changeDate(this)">
                   <button class="btn btn-primary m-0" onclick="changeDateToWeek('today')">오늘</button>
                 </div>
                 <section id="hero-slider" class="hero-slider p-0">
@@ -41,7 +41,7 @@
                                 <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
                                 <h2 class="mb-2"><a th:href="'/mystudy/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">How to Avoid Distraction and Stay Focused During Video Calls?</a></h2>
                                 <div class="post-meta"><span class="me-1" th:each="tag : ${dtoList.tagsArr}" th:text="'#'+${tag}">Culture</span> </div>
-                                <p class="mb-4 d-block" th:classappend="'review'" th:text="${dtoList.content}"></p>
+                                <p class="mb-4 review" th:text="${dtoList.content}"></p>
                               </div>
                             </div>
                           </div>
@@ -67,7 +67,7 @@
               </div>
               <div class="col-lg-4 border-start h-100">
                 <div class="d-flex flex-column">
-                <div class="post-entry-1 rounded border border-primary p-3" th:each="dtoList : ${sharedPageDTO.dtoList}">
+                <div class="post-entry-1 mb-2 rounded border border-primary p-3" th:each="dtoList : ${sharedPageDTO.dtoList}">
                   <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
                   <h2 class="mb-2"><a th:href="'/shared/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
                   <span class="author mb-3 d-block" th:text="${dtoList.memberName}">Jenny Wilson</span>
@@ -89,8 +89,8 @@
 </body>
 <script layout:fragment="script" th:inline="javascript">
   $( function() {
-    $( "#date1" ).datepicker();
-    $( "#date1" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    $( "#date" ).datepicker();
+    $( "#date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
   } );
   /*
   * <div class="post-entry-1 text-center">
@@ -99,8 +99,8 @@
   *
   * */
   window.onload = ()=>{
-    let date1 = [[${pageResponseDTO.date1}]];
-    getDates(date1);
+    let date = [[${pageResponseDTO.date}]];
+    getDates(date);
   };
 
   function getDates(targetDate) {
@@ -158,17 +158,17 @@
   function changeDate(element) {
     let targetDate = element.value;
     $('#date1Label').text(targetDate);
-    location.href = "/main/main?date1=" + targetDate + "&date2=" + targetDate;
+    location.href = "/main/main?date=" + targetDate;
   }
 
   function changeDateToClick(element) {
     let targetDate = element.dataset.date;
-    location.href = "/main/main?date1=" + targetDate + "&date2=" + targetDate;
+    location.href = "/main/main?date=" + targetDate;
   }
   function changeDateToWeek(destination) {
-    let date1 = [[${pageResponseDTO.date1}]];
-    let targetDateObj = new Date(date1);
-    let dd = new Date(date1);
+    let date = [[${pageResponseDTO.date}]];
+    let targetDateObj = new Date(date);
+    let dd = new Date(date);
     if (destination == 'next') {
       dd.setDate(targetDateObj.getDate() +7);
     } else if (destination == 'prev') {
@@ -178,7 +178,7 @@
       dd = today;
     }
     let ddDate = dd.getFullYear() + '-' + ((dd.getMonth()+1) < 10 ? '0' + (dd.getMonth()+1) : (dd.getMonth()+1)) + '-' + (dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate());
-    location.href = "/main/main?date1=" + ddDate + "&date2=" + ddDate;
+    location.href = "/main/main?date=" + ddDate;
   }
 </script>
 </html>

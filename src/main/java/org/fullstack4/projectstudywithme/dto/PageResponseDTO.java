@@ -25,6 +25,7 @@ public class PageResponseDTO<E> {
     private String search_type; //검색 타입 (t:제목, c:내용, u:사용자 아이디.....)
     private String[] search_types;
     private String search_word;
+    private String date;
     private String date1;
     private String date2;
     private String orderType;
@@ -51,6 +52,7 @@ public class PageResponseDTO<E> {
         this.search_type = pageRequestDTO.getSearch_type();
         this.search_types = pageRequestDTO.getSearch_types();
         this.search_word = pageRequestDTO.getSearch_word();
+        this.date = pageRequestDTO.getDate();
         this.date1 = pageRequestDTO.getDate1();
         this.date2 = pageRequestDTO.getDate2();
         this.orderType = pageRequestDTO.getOrderType();
