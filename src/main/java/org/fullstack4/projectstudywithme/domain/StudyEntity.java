@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -20,10 +21,10 @@ public class StudyEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idx;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = true)
     @Builder.Default
     private String thumbnailPath="/upload/";
-    @Column(length = 100, nullable = false)
+    @Column(length = 100, nullable = true)
     @Builder.Default
     private String thumbnail="default.jpg";
     @Column(length = 100, nullable = false)
@@ -37,9 +38,9 @@ public class StudyEntity extends BaseEntity {
     @Column(length = 2, nullable = false)
     private String displayYn;
     @Column(length = 10, nullable = true)
-    private LocalDateTime displayStartDate;
+    private LocalDate displayStartDate;
     @Column(length = 10, nullable = true)
-    private LocalDateTime displayEndDate;
+    private LocalDate displayEndDate;
     @Builder.Default
     @Column(length = 11, nullable = false)
     private int likes=0;

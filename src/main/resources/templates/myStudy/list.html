@@ -73,11 +73,21 @@
                             <th:block th:if="${pageResponseDTO.dtoList != null && pageResponseDTO.dtoList.size() != 0}">
                                 <tr th:each="dtoList, status : ${pageResponseDTO.dtoList}" th:with="i=${pageResponseDTO.total_count} - (${pageResponseDTO.page_size} * ${pageResponseDTO.page - 1})">
                                     <th class="text-center align-middle" scope="row" th:text="${i} - ${status.index}">1</th>
-                                    <td class="text-center align-middle" th:text="${dtoList.title}" style="cursor: pointer" th:data-idx="${dtoList.idx}" onclick="view(this)">제목입니다.</td>
+                                    <td class="text-center align-middle"  style="cursor: pointer" th:data-idx="${dtoList.idx}" onclick="view(this)">
+                                        <div class="w-100 d-flex gap-2 align-items-center">
+                                        <img class="w-25 rounded-2" th:src="${dtoList.thumbnailPath}+${dtoList.thumbnail}">
+                                        <span th:text="${dtoList.title}"></span>
+                                        </div>
+                                    </td>
                                     <td class="text-center align-middle" th:text="${dtoList.regDateToString}">2024-05-13</td>
                                     <td class="text-center align-middle" th:text="${dtoList.likes}"><i class="bi bi-heart-fill text-danger"></i> 100</td>
                                     <td class="text-center align-middle" th:text="${dtoList.displayYn}">Y</td>
-                                    <td class="text-center align-middle" th:text="${dtoList.displayStartDateToString} + '~' + ${dtoList.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
+                                    <th:block th:if="${dtoList.displayYn.toString().equals('Y')}">
+                                        <td class="text-center align-middle" th:text="${dtoList.displayStartDateToString} + '~' + ${dtoList.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
+                                    </th:block>
+                                    <th:block th:unless="${dtoList.displayYn.toString().equals('Y')}">
+                                        <td class="text-center align-middle">-</td>
+                                    </th:block>
                                 </tr>
                             </th:block>
                             <th:block th:unless="${pageResponseDTO.dtoList != null && pageResponseDTO.dtoList.size() != 0}">

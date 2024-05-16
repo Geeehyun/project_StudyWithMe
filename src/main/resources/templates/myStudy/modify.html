@@ -14,91 +14,251 @@
         <section id="contact" class="contact mb-5">
             <div class="container" data-aos="fade-up">
                 <div class="p-2 bg-white mt-3">
-                    <table class="table border bg-white">
-                        <colgroup>
-                            <col span="4" class="w-25">
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">제목</th>
-                            <td class="text-start" colspan="3">
-                                <input class="form-control" type="text" name="title" maxlength="20" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출여부</th>
-                            <td class="text-start" colspan="3">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="shareYN" id="shareN" value="N" checked>
-                                    <label class="form-check-label" for="shareN">미노출</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="shareYN" id="shareY" value="Y">
-                                    <label class="form-check-label" for="shareY">노출</label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출기간</th>
-                            <td class="text-center" colspan="3">
-                                <div class="form-group d-flex align-items-center">
-                                    <input type="date" class="form-control w-25" name="start-date" id="start-date">
-                                    <span class="pe-3 ps-3"> ~ </span>
-                                    <input type="date" class="form-control w-25" name="end-date" id="end-date">
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white" scope="row">분야</th>
-                            <td class="text-start" colspan="3">
-                                <input class="form-control" type="text" name="category" maxlength="50" required>
-                                <small class="p-1">,로 구분하여 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white" scope="row">해쉬태그</th>
-                            <td class="text-start" colspan="3">
-                                <input class="form-control" type="text" name="category" maxlength="50" required>
-                                <small class="p-1">,로 구분하여 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">공유한 사람</th>
-                            <td class="text-start" colspan="3">
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                                <span class="d-block">장지현(2024-05-13 00:00:00) <span class="badge bg-primary-dark">x</span></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">썸네일</th>
-                            <th class="text-center bg-primary text-white align-middle" scope="row" colspan="3">내용</th>
-                        </tr>
-                        <tr>
-                            <td class="text-start border align-middle">
-                                <img class="rounded" width="100%" src="/img/default.png">
-                                <div class="mt-3">
-                                    <input class="form-control" type="file" id="formFile">
-                                </div>
-                            </td>
-                            <td class="text-start" colspan="3">
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="12"></textarea>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/list'">목록</button>
+                    <form action="/mystudy/modify" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="idx" th:value="${studyDTO.idx}">
+                        <table class="table border bg-white">
+                            <colgroup>
+                                <col span="4" class="w-25">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">제목</th>
+                                <td class="text-start" colspan="3">
+                                    <input class="form-control" type="text" name="title" maxlength="20" th:value="${studyDTO.title}" required>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출여부</th>
+                                <td class="text-start" colspan="3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="displayYn" id="shareN" value="N" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('N')}">
+                                        <label class="form-check-label" for="shareN">미노출</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="displayYn" id="shareY" value="Y" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('Y')}">
+                                        <label class="form-check-label" for="shareY">노출</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출기간</th>
+                                <td class="text-center" colspan="3">
+                                    <div class="form-group d-flex align-items-center">
+                                        <input type="date" class="form-control w-25 displayDate" name="displayStartDate" id="start-date" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayStartDate}">
+                                        <span class="pe-3 ps-3"> ~ </span>
+                                        <input type="date" class="form-control w-25 displayDate" name="displayEndDate" id="end-date" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayEndDate}">
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">분야</th>
+                                <td class="text-start" colspan="3">
+                                    <div>
+                                        <button type="button" class="btn btn-dark mb-1" data-type="category" onclick="addInput(this)">추가</button>
+                                        <div class="input-group mb-1 w-25" th:each="category : ${studyDTO.categories}">
+                                            <input type="text" name="category" maxlength="10" class="form-control" th:value="${category}">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="deleteThis(this)">X</button>
+                                        </div>
+                                    </div>
+                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">해쉬태그</th>
+                                <td class="text-start" colspan="3">
+                                    <div>
+                                        <button type="button" class="btn btn-dark mb-1" data-type="tags" onclick="addInput(this)">추가</button>
+                                        <div class="input-group mb-1 w-25" th:each="tags : ${studyDTO.tagsArr}">
+                                            <input type="text" name="tags" maxlength="10" class="form-control" th:value="${tags}">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="deleteThis(this)">X</button>
+                                        </div>
+                                    </div>
+                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">공유 받은 사람</th>
+                                <td class="text-start" colspan="3">
+                                    <div class="mb-2">
+                                        <div class="input-group mb-1 w-25">
+                                            <input type="text" id="memberId" maxlength="50" class="form-control">
+                                            <button class="btn btn-outline-secondary" type="button" onclick="addMember()">추가</button>
+                                        </div>
+                                        <small class="p-1">* 아이디로 추가해주세요</small>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header p-1">
+                                            <p class="p-0 m-0 text-center">추가한 리스트</p>
+                                        </div>
+                                        <div class="card-body d-flex flex-column gap-1" id="memberList">
+                                            <div th:each="dto : ${sharedDTOList}">
+                                                <span class="d-block"><span th:text="${dto.memberName}">지현장</span><button class="btn badge bg-primary-dark" type="button" onclick="deleteThisToShare(this)">X</button></span>
+                                                <input type="hidden" name="sharedMemberId" th:value="${dto.memberId}">
+                                                <input type="hidden" name="sharedMemberName" th:value="${dto.memberName}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-center bg-primary text-white align-middle" scope="row">썸네일</th>
+                                <th class="text-center bg-primary text-white align-middle" scope="row" colspan="3">내용</th>
+                            </tr>
+                            <tr>
+                                <td class="text-start border align-middle">
+                                    <img id="thumbnail_img" class="rounded" width="100%" th:src="${studyDTO.thumbnailPath}+${studyDTO.thumbnail}">
+                                    <div class="mt-3">
+                                        <input class="form-control" type="file" name="file" id="formFile" onchange="changeProfileImg(event)">
+                                    </div>
+                                </td>
+                                <td class="text-start" colspan="3">
+                                    <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="12" th:text="${studyDTO.content}"></textarea>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/list'">목록</button>
+                                <button type="button" class="btn btn-primary" th:data-idx="${studyDTO.idx}" onclick="viewLink(this)">취소</button>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">등록</button>
+                            </div>
                         </div>
-                        <div>
-                            <button type="button" class="btn btn-primary">등록</button>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </section>
     </main><!-- End #main -->
 </div>
+<script layout:fragment="script">
+    function addInput(element) {
+        let type = element.dataset.type;
+        let divEl = document.createElement('div');
+        let inputEl = document.createElement('input');
+        let buttonEl = document.createElement('button');
+        divEl.classList.add('input-group', 'mb-1', 'w-25');
+        inputEl.classList.add('form-control');
+        inputEl.type = 'text';
+        inputEl.name = type;
+        inputEl.maxLength = 10;
+        buttonEl.classList.add('btn', 'btn-outline-secondary');
+        buttonEl.onclick = ()=> (deleteThis(buttonEl));
+        buttonEl.type = 'button';
+        buttonEl.innerText = 'X';
+        divEl.append(inputEl);
+        divEl.append(buttonEl);
+        if(element.parentElement.querySelectorAll('div.input-group').length <4) {
+            element.parentElement.append(divEl);
+        } else {
+            alert("최대 4개까지 추가할 수 있습니다.")
+        }
+    }
+    function deleteThis(element) {
+        if(element.parentElement.parentElement.querySelectorAll('div.input-group').length > 1) {
+            element.parentElement.remove();
+        } else {
+            alert("최소 1개의 입력칸이 필요합니다.")
+        }
+    }
+    function deleteThisToShare(element) {
+        element.parentElement.parentElement.remove();
+    }
+    function changeDisplay(element) {
+        let displayDates = document.querySelectorAll('.displayDate');
+        if(element.value == 'N') {
+            for (let displayDate of displayDates) {
+                displayDate.value = "";
+                displayDate.setAttribute('disabled','disabled');
+            }
+        } else {
+            for (let displayDate of displayDates) {
+                displayDate.removeAttribute('disabled');
+            }
+        }
+    }
+
+    function addMemberList(data) {
+        let memberList = document.querySelectorAll('input[name=sharedMemberId]');
+        for(let mem of memberList) {
+            if(mem.value == data.memberId) {
+                alert("이미 추가된 멤버 입니다.");
+                return;
+            }
+        }
+        let divEl = document.createElement('div');
+        let spanEl = document.createElement('span');
+        let spanEl2 = document.createElement('span');
+        let buttonEl = document.createElement('button');
+        let inputEl = document.createElement('input');
+        let inputEl2 = document.createElement('input');
+        spanEl.classList.add('d-block');
+        spanEl2.innerText = data.memberName;
+        buttonEl.classList.add('btn', 'badge', 'bg-primary-dark');
+        buttonEl.onclick = ()=> (deleteThisToShare(buttonEl));
+        buttonEl.type = 'button';
+        buttonEl.innerText = 'X';
+        inputEl.type = 'hidden';
+        inputEl.name = 'sharedMemberId';
+        inputEl.value = data.memberId;
+        inputEl2.type = 'hidden';
+        inputEl2.name = 'sharedMemberName';
+        inputEl2.value = data.memberName;
+        spanEl.append(spanEl2);
+        spanEl.append(buttonEl);
+        divEl.append(spanEl);
+        divEl.append(inputEl);
+        divEl.append(inputEl2);
+        document.getElementById('memberList').append(divEl);
+    }
+
+    function addMember() {
+        let memberId = document.getElementById('memberId');
+        let memberIdVal = document.getElementById('memberId').value;
+        if(memberIdVal.length > 0) {
+            $.ajax({
+                url: "/mystudy/selectMember",
+                method: 'post',
+                dataType : 'json',
+                data : {
+                    "memberId" : memberIdVal
+                },
+                success: function (data) {
+                    console.log(data);
+                    if(data.message == '조회 성공') {
+                        addMemberList(data);
+                        memberId.value = '';
+                    } else {
+                        memberId.value = '';
+                        alert(data.message);
+                    }
+                },
+                error : function(xhr, status, error) {
+                    console.log("xhr! : " + xhr);
+                    console.log("status! : " + status);
+                    console.log("error! : " + error);
+                }
+            })
+        } else {
+            alert("아이디를 입력해주세요");
+        }
+    }
+
+    // 프로필 이미지 변경
+    function changeProfileImg(e) {
+        let files = e.target.files;
+        let reader = new FileReader();
+        reader.onload = (e)=>{
+            $('#thumbnail_img').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(files[0]);
+    }
+
+    function viewLink(element) {
+        let idx = element.dataset.idx;
+        location.href = "/mystudy/view?idx="+idx;
+    }
+</script>
 </body>
 </html>

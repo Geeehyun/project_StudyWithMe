@@ -12,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Log4j2
 @SpringBootTest
 public class StudyServiceTests {
-//    @Autowired
-//    private StudyServiceIf studyServiceIf;
+    @Autowired
+    private StudyServiceIf studyServiceIf;
 //    @Test
 //    public void  testList() {
 //        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
@@ -21,4 +21,20 @@ public class StudyServiceTests {
 //        PageResponseDTO<StudyDTO> pageResponseDTO = studyServiceIf.list(pageRequestDTO, "test");
 //        log.info("pageResponseDTO : {}", pageResponseDTO);
 //    }
+
+    @Test
+    public void testListFromMe() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .build();
+        PageResponseDTO<StudyDTO> pageResponseDTO = studyServiceIf.listFromMe(pageRequestDTO, "test");
+        log.info("pageResponseDTO : {}", pageResponseDTO);
+    }
+
+    @Test
+    public void testListToMe() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .build();
+        PageResponseDTO<StudyDTO> pageResponseDTO = studyServiceIf.listToMe(pageRequestDTO, "test");
+        log.info("pageResponseDTO : {}", pageResponseDTO);
+    }
 }

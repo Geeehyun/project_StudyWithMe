@@ -9,6 +9,7 @@ import org.fullstack4.projectstudywithme.repository.MemberRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.fullstack4.projectstudywithme.domain.MemberEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -92,6 +93,7 @@ public class MemberServiceImpl implements MemberServiceIf {
         return idx;
     }
 
+    @Transactional
     @Override
     public int updateMember(MemberDTO newMemberDTO) {
         MemberEntity orgMemberEntity = memberRepository.findAllByMemberId(newMemberDTO.getMemberId());

@@ -7,6 +7,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface StudySearch {
     Page<StudyEntity> searchMyStudy(PageRequestDTO pageRequestDTO, String memberId);
-    Page<StudyEntity> searchSharedFromMe(Pageable pageable, String[] types, String search_word, String memberId);
-    Page<StudyEntity> searchSharedToMe(Pageable pageable, String[] types, String search_word, String memberId);
+    Page<StudyEntity> searchSharedFromMe(PageRequestDTO pageRequestDTO, String memberId);
+    Page<StudyEntity> searchSharedToMe(PageRequestDTO pageRequestDTO, String memberId);
 }

@@ -1,5 +1,6 @@
 package org.fullstack4.projectstudywithme.Common;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Set;
 
+@Log4j2
 public class CommonUtil {
 
     public static String parseString(Object obj) {
@@ -39,10 +41,12 @@ public class CommonUtil {
         }
         return result;
     }
-    public static String getUploadFolder(HttpServletRequest request, String target) {
+    public static String getUploadFolder(HttpServletRequest request) {
         // target 인자에는 upload폴더 하위 폴더 명을 넣으시오
-        String realPath = request.getServletContext().getRealPath("");
-        return realPath.substring(0,realPath.indexOf("build")) + "src\\main\\webapp\\resources\\upload\\" + target;
+//        String realPath = request.getServletContext().getRealPath("");
+//        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> realPath : {}", realPath);
+//        return realPath.substring(0,realPath.indexOf("build")) + "src\\main\\resources\\static\\upload";
+        return "D:\\projectStudyWithMe\\project\\src\\main\\resources\\static\\upload";
     }
 
     public static String parsingURI(String uri) {

@@ -14,6 +14,9 @@
         <section id="contact" class="contact mb-5">
             <div class="container" data-aos="fade-up">
                 <div class="p-2 bg-white mt-3">
+                    <div class="mb-3 text-end">
+                        <button class="btn btn-light" th:disabled="${likeMemberList.contains(session.memberDTO.memberId.toString())}" th:data-idx="${studyDTO.idx}" onclick="likeThis(this)"><i class="bi bi-heart-fill" th:classappend="${likeMemberList.contains(session.memberDTO.memberId.toString())} ? 'text-danger'"></i>&nbsp;좋아요</button>
+                    </div>
                     <table class="table border bg-white">
                         <colgroup>
                             <col span="4" class="w-25">
@@ -27,13 +30,18 @@
                             <th class="text-center bg-primary text-white" scope="row">등록일</th>
                             <td class="text-center" th:text="${studyDTO.regDateToString}">2024-05-13</td>
                             <th class="text-center bg-primary text-white" scope="row">좋아요</th>
-                            <td class="text-center"><i class="bi bi-heart-fill text-danger"></i>&nbsp;<span th:text="${studyDTO.likes}"></span></td>
+                            <td class="text-center"><span id="likeCnt" th:text="${studyDTO.likes}"></span></td>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">오늘의 학습 노출여부</th>
                             <td class="text-center" th:text="${studyDTO.displayYn}">Y</td>
                             <th class="text-center bg-primary text-white" scope="row">오늘의 학습 노출기간</th>
-                            <td class="text-center" th:text="${studyDTO.displayStartDateToString} + ' ~ ' + ${studyDTO.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
+                            <th:block th:if="${studyDTO.displayYn.toString().equals('Y')}">
+                                <td class="text-center" th:text="${studyDTO.displayStartDateToString} + ' ~ ' + ${studyDTO.displayEndDateToString}">2024-05-13 ~ 2024-05-13</td>
+                            </th:block>
+                            <th:block th:unless="${studyDTO.displayYn.toString().equals('Y')}">
+                                <td class="text-center">-</td>
+                            </th:block>
                         </tr>
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">분야</th>
@@ -42,11 +50,11 @@
                         <tr>
                             <th class="text-center bg-primary text-white" scope="row">해쉬태그</th>
                             <td class="text-start" colspan="3">
-                                <span class="badge bg-primary-light me-1" th:each="category :${studyDTO.categories}" th:text="${category}">#태그1</span>
+                                <span class="badge bg-primary-light me-1" th:each="tag :${studyDTO.tagsArr}" th:text="${tag}">#태그1</span>
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-center bg-primary text-white align-middle" scope="row">공유한 사람</th>
+                            <th class="text-center bg-primary text-white align-middle" scope="row">공유 받은 사람</th>
                             <th:block th:if="${not sharedDTOList.isEmpty()}">
                                 <td class="text-start" colspan="3">
                                     <span class="d-block" th:each="dto:${sharedDTOList}" th:text="${dto.memberName} + '(' + ${dto.regDateToString} +')'">장지현(2024-05-13 00:00:00)</span>
@@ -77,8 +85,8 @@
                             <button type="button" class="btn btn-primary" onclick="listLink()">목록</button>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-primary">삭제</button>
-                            <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/modify'">수정</button>
+                            <button type="button" class="btn btn-primary" th:data-idx="${studyDTO.idx}" onclick="deleteStudy(this)">삭제</button>
+                            <button type="button" class="btn btn-primary" th:data-idx="${studyDTO.idx}" onclick="modifyLink(this)">수정</button>
                             <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/regist'">학습 등록</button>
                         </div>
                     </div>
@@ -117,6 +125,55 @@
             queryString += "&orderType=" + orderType;
         }
         location.href = '/mystudy/list' + queryString;
+    }
+
+    function modifyLink(element) {
+        let idx = element.dataset.idx;
+        location.href = "/mystudy/modify?idx="+idx;
+    }
+
+    function deleteStudy(element) {
+        if(confirm("삭제하시겠습니까?")) {
+            let idx = element.dataset.idx;
+            let formEl = document.createElement('form');
+            let inputEl = document.createElement('input');
+            formEl.id = "frmDelete";
+            formEl.action = "/mystudy/delete";
+            formEl.method = "post";
+            inputEl.type = "hidden";
+            inputEl.name = "idx";
+            inputEl.value = idx;
+            formEl.append(inputEl);
+            document.body.append(formEl);
+            document.getElementById('frmDelete').submit();
+        }
+    }
+
+    function likeThis(element) {
+        let idx = element.dataset.idx;
+        $.ajax({
+            url: "/mystudy/like",
+            method: 'post',
+            dataType : 'json',
+            data : {
+                "idx" : idx
+            },
+            success: function (data) {
+                console.log(data);
+                alert(data.message);
+                if(data.result == "success") {
+                    element.setAttribute("disabled", "disabled");
+                    element.firstChild.classList.add("text-danger");
+                    let likeCnt = document.getElementById('likeCnt').innerText;
+                    document.getElementById('likeCnt').innerText = (String)(parseInt(likeCnt) + 1);
+                }
+            },
+            error : function(xhr, status, error) {
+                console.log("xhr! : " + xhr);
+                console.log("status! : " + status);
+                console.log("error! : " + error);
+            }
+        })
     }
 </script>
 </body>
