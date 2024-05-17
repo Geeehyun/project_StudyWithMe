@@ -40,6 +40,7 @@ public class PageRequestDTO {
     private String date2;
     @Builder.Default
     private String orderType="regDate";
+
     private String linkParams;
 
 

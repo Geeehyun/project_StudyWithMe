@@ -37,7 +37,7 @@ public class MainController {
             model.addAttribute("pageResponseDTO", myPageDTO);
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> myPageDTO : {}", myPageDTO);
 
-            pageRequestDTO.setPage_size(3);
+            pageRequestDTO.setPage_size(2);
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>> pageRequestDTO : {}", pageRequestDTO);
             PageResponseDTO<StudyDTO> sharedPageDTO = studyServiceIf.listToMe(pageRequestDTO, sessionId);
             model.addAttribute("sharedPageDTO", sharedPageDTO);

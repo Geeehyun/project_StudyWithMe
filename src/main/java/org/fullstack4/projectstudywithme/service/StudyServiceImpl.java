@@ -192,6 +192,22 @@ public class StudyServiceImpl implements StudyServiceIf {
                 studyDTO.setThumbnail(map.get("newName"));
                 studyEntity= modelMapper.map(studyDTO, StudyEntity.class);
                 int idx = studyRepository.save(studyEntity).getIdx();
+                if(sharedList.size() > 0) {
+                    sharedList.forEach(dto -> {dto.setStudyIdx(String.valueOf(idx));});
+                    for(StudySubDTO dto : sharedList) {
+                        int subIdx = registShare(dto);
+                        if (subIdx > 0) {
+                            result++;
+                        }
+                    }
+                } else if(idx > 0) {
+                    result++;
+                }
+            }
+        } else {
+            studyEntity= modelMapper.map(studyDTO, StudyEntity.class);
+            int idx = studyRepository.save(studyEntity).getIdx();
+            if(sharedList.size() > 0) {
                 sharedList.forEach(dto -> {dto.setStudyIdx(String.valueOf(idx));});
                 for(StudySubDTO dto : sharedList) {
                     int subIdx = registShare(dto);
@@ -199,16 +215,8 @@ public class StudyServiceImpl implements StudyServiceIf {
                         result++;
                     }
                 }
-            }
-        } else {
-            studyEntity= modelMapper.map(studyDTO, StudyEntity.class);
-            int idx = studyRepository.save(studyEntity).getIdx();
-            sharedList.forEach(dto -> {dto.setStudyIdx(String.valueOf(idx));});
-            for(StudySubDTO dto : sharedList) {
-                int subIdx = registShare(dto);
-                if (subIdx > 0) {
-                    result++;
-                }
+            } else if(idx > 0) {
+                result++;
             }
         }
         return result;

@@ -14,7 +14,7 @@
         <section id="contact" class="contact mb-5">
             <div class="container" data-aos="fade-up">
                 <div class="p-2 bg-white mt-3">
-                    <form action="/mystudy/modify" method="post" enctype="multipart/form-data">
+                    <form id="frmPost" action="/mystudy/modify" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="idx" th:value="${studyDTO.idx}">
                         <table class="table border bg-white">
                             <colgroup>
@@ -24,30 +24,33 @@
                             <tr>
                                 <th class="text-center bg-primary text-white align-middle" scope="row">제목</th>
                                 <td class="text-start" colspan="3">
-                                    <input class="form-control" type="text" name="title" maxlength="20" th:value="${studyDTO.title}" required>
+                                    <input data-name="제목" class="form-control" type="text" name="title" maxlength="20" th:value="${studyDTO.title}">
+                                    <small id="err_title" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출여부</th>
                                 <td class="text-start" colspan="3">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="displayYn" id="shareN" value="N" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('N')}">
+                                        <input data-name="오늘의 학습 노출여부" class="form-check-input" type="radio" name="displayYn" id="shareN" value="N" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('N')}">
                                         <label class="form-check-label" for="shareN">미노출</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="displayYn" id="shareY" value="Y" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('Y')}">
+                                        <input data-name="오늘의 학습 노출여부" class="form-check-input" type="radio" name="displayYn" id="shareY" value="Y" onchange="changeDisplay(this)" th:checked="${studyDTO.displayYn.toString().equals('Y')}">
                                         <label class="form-check-label" for="shareY">노출</label>
                                     </div>
+                                    <small id="err_displayYn" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             <tr>
                                 <th class="text-center bg-primary text-white align-middle" scope="row">오늘의 학습 노출기간</th>
-                                <td class="text-center" colspan="3">
+                                <td class="text-start" colspan="3">
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="date" class="form-control w-25 displayDate" name="displayStartDate" id="start-date" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayStartDate}">
+                                        <input data-name="오늘의 학습 노출 시작일" type="date" class="form-control w-25 displayDate" name="displayStartDate" id="displayStartDate" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayStartDate}">
                                         <span class="pe-3 ps-3"> ~ </span>
-                                        <input type="date" class="form-control w-25 displayDate" name="displayEndDate" id="end-date" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayEndDate}">
+                                        <input data-name="오늘의 학습 노출 종료일" type="date" class="form-control w-25 displayDate" name="displayEndDate" id="displayEndDate" th:disabled="${studyDTO.displayYn.toString().equals('N')}" th:value="${studyDTO.displayEndDate}">
                                     </div>
+                                    <small id="err_displayDate" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             <tr>
@@ -56,11 +59,12 @@
                                     <div>
                                         <button type="button" class="btn btn-dark mb-1" data-type="category" onclick="addInput(this)">추가</button>
                                         <div class="input-group mb-1 w-25" th:each="category : ${studyDTO.categories}">
-                                            <input type="text" name="category" maxlength="10" class="form-control" th:value="${category}">
+                                            <input data-name="분야" type="text" name="category" maxlength="10" class="form-control" th:value="${category}">
                                             <button class="btn btn-outline-secondary" type="button" onclick="deleteThis(this)">X</button>
                                         </div>
                                     </div>
-                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
+                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small><br>
+                                    <small id="err_category" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             <tr>
@@ -69,11 +73,12 @@
                                     <div>
                                         <button type="button" class="btn btn-dark mb-1" data-type="tags" onclick="addInput(this)">추가</button>
                                         <div class="input-group mb-1 w-25" th:each="tags : ${studyDTO.tagsArr}">
-                                            <input type="text" name="tags" maxlength="10" class="form-control" th:value="${tags}">
+                                            <input data-name="해쉬태그" type="text" name="tags" maxlength="10" class="form-control" th:value="${tags}">
                                             <button class="btn btn-outline-secondary" type="button" onclick="deleteThis(this)">X</button>
                                         </div>
                                     </div>
-                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small>
+                                    <small class="p-1">* 최대 4개까지 작성 가능 / 하나의 키워드의 최대 길이는 10자 이내로 작성</small><br>
+                                    <small id="err_tags" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             <tr>
@@ -112,14 +117,15 @@
                                     </div>
                                 </td>
                                 <td class="text-start" colspan="3">
-                                    <textarea name="content" class="form-control" id="exampleFormControlTextarea1" rows="12" th:text="${studyDTO.content}"></textarea>
+                                    <textarea data-name="내용" name="content" class="form-control" id="content" rows="12" th:text="${studyDTO.content}"></textarea>
+                                    <small id="err_content" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-between">
                             <div>
-                                <button type="button" class="btn btn-primary" onclick="location.href = '/mystudy/list'">목록</button>
+                                <button type="button" class="btn btn-primary" onclick="listLink()">목록</button>
                                 <button type="button" class="btn btn-primary" th:data-idx="${studyDTO.idx}" onclick="viewLink(this)">취소</button>
                             </div>
                             <div>
@@ -132,7 +138,7 @@
         </section>
     </main><!-- End #main -->
 </div>
-<script layout:fragment="script">
+<script layout:fragment="script" th:inline="javascript">
     function addInput(element) {
         let type = element.dataset.type;
         let divEl = document.createElement('div');
@@ -254,11 +260,81 @@
         }
         reader.readAsDataURL(files[0]);
     }
+    function listLink() {
+        let type = [[${param.type}]];
+        if (type == null) {
+            location.href = "/mystudy/list";
+        } else if(type = 'fromMe') {
+            location.href = "/shared/list?type=fromMe";
+        }
+    }
 
     function viewLink(element) {
+        let type = [[${param.type}]];
         let idx = element.dataset.idx;
-        location.href = "/mystudy/view?idx="+idx;
+        if (type == null) {
+            location.href = "/mystudy/view?idx="+idx;
+        } else if(type = 'fromMe') {
+            location.href = "/shared/view?type=fromMe&idx="+idx;
+        }
     }
+
+    // Front 유효성검사
+    let checkTarget = ['title', 'displayYn', 'displayStartDate', 'displayEndDate', 'category', 'tags', 'content'];
+    document.querySelector('#frmPost').addEventListener('submit', checkForm);
+    function checkForm() {
+        event.preventDefault();
+        for (let info of document.querySelectorAll('.info')) {
+            $(info).text("");
+        }
+        // 공란 검사
+        for (let element of checkTarget) {
+            let target = $('input[name=' + element + ']');
+            if (element == 'displayYn') {
+                if(!$('input#shareN').is(":checked") && !$('input#shareY').is(":checked")) {
+                    $('#err_'+element).text($(target).data('name') + "을 선택해주세요");
+                    $(target).focus();
+                    return false;
+                }
+            } else if(element == 'displayStartDate' || element == 'displayEndDate') {
+                if($('input#shareY').is(":checked")) {
+                    if (!nullCheck2($(target))) {
+                        $('#err_displayDate').text($(target).data('name') + "을/를 입력해주세요");
+                        $(target).focus();
+                        return false;
+                    }
+                }
+            } else if(element == 'category' || element == 'tags') {
+                if (!nullCheck2Arr($(target))) {
+                    $('#err_' + element).text($(target).data('name') + "을/를 최소 1건 이상 입력해주시고, 추가한 모든 칸을 입력해주세요");
+                    $(target).focus();
+                    return false;
+                }
+            } else if(element == 'content') {
+                if (!nullCheck2($('#content'))) {
+                    $('#err_' + element).text($('#content').data('name') + "을/를 입력해주세요");
+                    $('#content').focus();
+                    return false;
+                }
+            } else if (!nullCheck2($(target))) {
+                $('#err_' + element).text($(target).data('name') + "을/를 입력해주세요");
+                $(target).focus();
+                return false;
+            }
+        }
+        // 날짜 체크
+        if($('input#shareY').is(":checked")) {
+            if(!dateCheck2($('#displayStartDate'), $('#displayEndDate'))) {
+                $('#err_displayDate').text("시작 날짜는 종료날짜 보다 미래일 수 없습니다.");
+                $('#displayStartDate').focus();
+                return false;
+            }
+        }
+        if(confirm("등록하시겠습니까?")) {
+            document.getElementById('frmPost').submit();
+        };
+    }
+
 </script>
 </body>
 </html>

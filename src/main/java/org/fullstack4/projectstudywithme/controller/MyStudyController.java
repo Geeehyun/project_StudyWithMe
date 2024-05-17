@@ -2,6 +2,7 @@ package org.fullstack4.projectstudywithme.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.projectstudywithme.Common.CommonUtil;
@@ -11,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -92,13 +94,19 @@ public class MyStudyController {
     public void getRegist() {}
 
     @PostMapping("/regist")
-    public String postRegist(StudyDTO studyDTO,
+    public String postRegist(@Valid StudyDTO studyDTO,
+                           BindingResult bindingResult,
                            @RequestParam(name = "sharedMemberId", defaultValue = "")String sharedMemberId,
                            @RequestParam(name = "sharedMemberName", defaultValue = "")String sharedMemberName,
                            @RequestParam("file") MultipartFile file,
                            RedirectAttributes redirectAttributes,
                            HttpSession session,
                            HttpServletRequest request) {
+        if(bindingResult.hasErrors()){
+            log.info("MyStudyController >> postRegist Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
+            return "redirect:/mystudy/regist";
+        }
         if (session.getAttribute("memberDTO") != null) {
             MemberDTO sessionMemberDTO = (MemberDTO) session.getAttribute("memberDTO");
             String sessionId = sessionMemberDTO.getMemberId();
@@ -129,7 +137,7 @@ public class MyStudyController {
                 }
             }
             int result = studyServiceIf.registStudy(studyDTO, sharedList, fileDTO);
-            if(result > 0 ) {
+            if(result > 0) {
                 redirectAttributes.addFlashAttribute("result", "게시글 정상 등록");
                 return "redirect:/mystudy/list";
             } else {
@@ -166,13 +174,20 @@ public class MyStudyController {
     }
 
     @PostMapping("/modify")
-    public String postModify(StudyDTO studyDTO,
+    public String postModify(@Valid StudyDTO studyDTO,
+                           BindingResult bindingResult,
                            @RequestParam(name = "sharedMemberId", defaultValue = "")String sharedMemberId,
                            @RequestParam(name = "sharedMemberName", defaultValue = "")String sharedMemberName,
                            @RequestParam("file") MultipartFile file,
                            RedirectAttributes redirectAttributes,
                            HttpSession session,
                            HttpServletRequest request) {
+        if(bindingResult.hasErrors()){
+            log.info("MyStudyController >> postModify Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
+            redirectAttributes.addAttribute("idx", studyDTO.getIdx());
+            return "redirect:/mystudy/modify";
+        }
         if (session.getAttribute("memberDTO") != null) {
             MemberDTO sessionMemberDTO = (MemberDTO) session.getAttribute("memberDTO");
             String sessionId = sessionMemberDTO.getMemberId();
@@ -207,6 +222,7 @@ public class MyStudyController {
                 redirectAttributes.addFlashAttribute("err", "게시글 수정 실패");
                 redirectAttributes.addAttribute("studyDTO", studyDTO);
                 redirectAttributes.addAttribute("sharedDTOList", sharedList);
+                redirectAttributes.addAttribute("idx", studyDTO.getIdx());
                 return "redirect:/mystudy/modify";
             }
         }

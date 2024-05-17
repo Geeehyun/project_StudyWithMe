@@ -1316,6 +1316,12 @@ section {
   /* word-break: keep-all; */
 }
 
+.review2 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis !important;
+}
+
 .hide {
   position: absolute;
   top: 0;

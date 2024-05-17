@@ -2,6 +2,7 @@ package org.fullstack4.projectstudywithme.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.projectstudywithme.Common.CommonUtil;
@@ -10,6 +11,7 @@ import org.fullstack4.projectstudywithme.service.StudyServiceIf;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -136,7 +138,7 @@ public class SharedStudyController {
             } else {
                 model.addAttribute("studyDTO", studyDTO);
                 model.addAttribute("sharedDTOList", sharedDTO);
-                return "/shared/modify";
+                return "/mystudy/modify";
             }
         }
         redirectAttributes.addFlashAttribute("err","잘못된 접근");
@@ -144,13 +146,20 @@ public class SharedStudyController {
     }
 
     @PostMapping("/modify")
-    public String postModify(StudyDTO studyDTO,
+    public String postModify(@Valid StudyDTO studyDTO,
+                             BindingResult bindingResult,
                              @RequestParam(name = "sharedMemberId", defaultValue = "")String sharedMemberId,
                              @RequestParam(name = "sharedMemberName", defaultValue = "")String sharedMemberName,
                              @RequestParam("file") MultipartFile file,
                              RedirectAttributes redirectAttributes,
                              HttpSession session,
                              HttpServletRequest request) {
+        if(bindingResult.hasErrors()){
+            log.info("MyStudyController >> postModify Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
+            redirectAttributes.addAttribute("idx", studyDTO.getIdx());
+            return "redirect:/mystudy/modify";
+        }
         if (session.getAttribute("memberDTO") != null) {
             MemberDTO sessionMemberDTO = (MemberDTO) session.getAttribute("memberDTO");
             String sessionId = sessionMemberDTO.getMemberId();

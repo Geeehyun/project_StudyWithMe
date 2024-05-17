@@ -20,14 +20,19 @@
                     </div>
                 </div>
                 <div class="form mt-1">
-                    <form action="" method="post" role="form" class="php-email-form">
+                    <form id="frmLogin" action="" method="post" role="form" class="php-email-form">
                         <label class="p-2" for="memberId">ID</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="memberId" id="memberId" placeholder="ID" required>
+                            <input data-name="아이디" type="text" class="form-control" name="memberId" id="memberId" placeholder="ID">
+                            <small id="err_memberId" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="pwd">PASSWORD</label>
                         <div class="form-group">
-                            <input type="password" class="form-control" name="pwd" id="pwd" placeholder="PASSWORD" required>
+                            <div class="position-relative">
+                                <input data-name="비밀번호" type="password" class="form-control" name="pwd" id="pwd" placeholder="PASSWORD">
+                                <i id="showPwd" class="bi bi-eye-fill position-absolute" style="top : 30%; right: 10px;cursor: pointer" onclick="showOrHidePwd(this)"></i>
+                            </div>
+                            <small id="err_pwd" class="p-1 text-danger info"></small>
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -44,5 +49,35 @@
         </section>
     </main><!-- End #main -->
 </div>
+<script layout:fragment="script">
+    function showOrHidePwd(element) {
+        element.classList.toggle('bi-eye-fill');
+        element.classList.toggle('bi-eye-slash-fill');
+        if($('#pwd').attr('type') == 'password') {
+            $('#pwd').prop("type", "text");
+        } else {
+            $('#pwd').prop("type", "password");
+        }
+    }
+
+    let checkTarget = ['memberId', 'pwd'];
+    document.querySelector('#frmLogin').addEventListener('submit', checkForm);
+    function checkForm() {
+        event.preventDefault();
+        for (let info of document.querySelectorAll('.info')) {
+            $(info).text("");
+        }
+        // 공란 검사
+        for (let element of checkTarget) {
+            let target = $('input[name=' + element + ']');
+            if (!nullCheck($(target))) {
+                $('#err_' + element).text($(target).data('name') + "을/를 입력해주세요");
+                $(target).focus();
+                return false;
+            }
+        }
+        document.querySelector('#frmLogin').submit();
+    }
+</script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 package org.fullstack4.projectstudywithme.dto;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,18 +21,23 @@ public class StudyDTO {
     private String idx;
     private String thumbnailPath;
     private String thumbnail;
+    @NotBlank
     private String title;
+    @NotBlank
     private String content;
     private String memberId;
     private String memberName;
+    @NotNull
     private String displayYn;
     private LocalDate displayStartDate;
     private String displayStartDateToString;
     private LocalDate displayEndDate;
     private String displayEndDateToString;
     private String likes;
+    @NotNull
     private String category;
     private String[] categories;
+    @NotNull
     private String tags;
     private String[] tagsArr;
     private LocalDateTime regDate;

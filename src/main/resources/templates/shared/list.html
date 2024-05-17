@@ -54,16 +54,14 @@
                         <colgroup>
                             <col style="width: 5%">
                             <col style="width: 40%">
-                            <col style="width: 20%">
-                            <col style="width: 20%">
-                            <col style="width: 15%">
+                            <col style="width: 30%">
+                            <col style="width: 25%">
                         </colgroup>
                         <thead class="table-secondary">
                         <tr>
                             <th class="text-center bg-primary text-white" scope="col">No</th>
                             <th class="text-center bg-primary text-white" scope="col">제목</th>
                             <th class="text-center bg-primary text-white" scope="col">공유자</th>
-                            <th class="text-center bg-primary text-white" scope="col">공유기간</th>
                             <th class="text-center bg-primary text-white" scope="col">등록일</th>
                         </tr>
                         </thead>
@@ -80,7 +78,6 @@
                                 <td class="text-center align-middle">
                                     <span class="d-block" th:text="${dtoList.memberName}">장지현 (2024-05-13 00:00:00)</span>
                                 </td>
-                                <td class="text-center align-middle" th:text="${dtoList.displayStartDateToString} + '~' + ${dtoList.displayEndDateToString}"></td>
                                 <td class="text-center align-middle" th:text="${dtoList.regDateToString}">2024-05-13</td>
                             </tr>
                         </th:block>

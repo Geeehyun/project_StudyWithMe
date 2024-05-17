@@ -18,6 +18,6 @@ public class HandlerInterceptorConfigure2 implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor)
-                .addPathPatterns("/main/*", "/mystudy/*", "/shared/*");
+                .addPathPatterns("/main/*", "/mystudy/*", "/shared/*", "/mypage/*");
     }
 }

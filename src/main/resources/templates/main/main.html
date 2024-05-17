@@ -67,14 +67,24 @@
               </div>
               <div class="col-lg-4 border-start h-100">
                 <div class="d-flex flex-column">
-                <div class="post-entry-1 mb-2 rounded border border-primary p-3" th:each="dtoList : ${sharedPageDTO.dtoList}">
-                  <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
-                  <h2 class="mb-2"><a th:href="'/shared/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
-                  <span class="author mb-3 d-block" th:text="${dtoList.memberName}">Jenny Wilson</span>
-                  <p class="mb-4 d-block" th:text="${dtoList.content}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
-                  <span class="author mb-3 d-block"><i class="bi bi-heart-fill"></i>&nbsp;<span th:text="${dtoList.likes}"></span></span>
-                </div>
-                <button class="btn btn-light border-primary" onclick="location.href = '/shared/list'">더 보러 가기</button>
+                  <th:block th:if="${!sharedPageDTO.dtoList.isEmpty()}">
+                    <div class="post-entry-1 mb-2 rounded border border-primary p-3" th:each="dtoList : ${sharedPageDTO.dtoList}">
+                      <div class="post-meta"><span class="badge text-bg-primary me-1" th:each="category : ${dtoList.categories}" th:text="${category}">Culture</span> <span class="mx-1">&bullet;</span> <span th:text="${dtoList.regDateToString}">Jul 5th '22</span></div>
+                      <h2 class="mb-2"><a th:href="'/shared/view?idx='+${dtoList.idx}" th:text="${dtoList.title}">11 Work From Home Part-Time Jobs You Can Do Now</a></h2>
+                      <div class="w-100 p-1 d-flex justify-content-center align-items-center"><img style="width: 60%" th:src="${dtoList.thumbnailPath}+${dtoList.thumbnail}"></div>
+                      <small class="author mb-1 d-block" th:text="'공유자 : ' + ${dtoList.memberName}">Jenny Wilson</small>
+                      <p class="mb-1 d-block review2" th:text="${dtoList.content}">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vero temporibus repudiandae, inventore pariatur numquam cumque possimus</p>
+                      <span class="author mb-1 d-block"><i class="bi bi-heart-fill"></i>&nbsp;<span th:text="${dtoList.likes}"></span></span>
+                    </div>
+                    <button class="btn btn-light border-primary" onclick="location.href = '/shared/list'">더 보러 가기</button>
+                  </th:block>
+                  <th:block th:unless="${!sharedPageDTO.dtoList.isEmpty()}">
+                    <div class="post-entry-1 mb-2 rounded border border-primary p-3 text-center">
+                      <p>아직 공유받은 게시글이 없습니다😢</p>
+                      <small>먼저 친구에게 학습내용을 공유해보는건 어떨까요?</small>
+                      <button type="button" class="btn btn-light w-100 text-center mt-3 border-primary" onclick="location.href = '/mystudy/list'">나의 학습 보러가기</button>
+                    </div>
+                  </th:block>
                 </div>
               </div>
             </div>
@@ -92,17 +102,10 @@
     $( "#date" ).datepicker();
     $( "#date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
   } );
-  /*
-  * <div class="post-entry-1 text-center">
-              <button type="button" class="btn btn-primary text-center">월요일</button>
-            </div>
-  *
-  * */
   window.onload = ()=>{
     let date = [[${pageResponseDTO.date}]];
     getDates(date);
   };
-
   function getDates(targetDate) {
     let targetDateObj = new Date(targetDate);
     let days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];

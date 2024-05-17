@@ -32,7 +32,10 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
         String search_word = pageRequestDTO.getSearch_word();
         String date1 = pageRequestDTO.getDate1();
         String date2 = pageRequestDTO.getDate2();
+
+
         PageRequest pageable = pageRequestDTO.getPageable(pageRequestDTO.getOrderType());
+
         QStudyEntity qStudy = QStudyEntity.studyEntity;
         JPQLQuery<StudyEntity> query = from(qStudy);
         query.where(qStudy.memberId.eq(memberId));
@@ -93,6 +96,7 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
             query.where(qStudy.regDate.loe(LocalDate.parse(date2, DateTimeFormatter.ISO_DATE).atTime(time)));
         }
         query.where(qStudy.idx.gt(0));
+        query.groupBy(qStudy.idx);
         //paging
         this.getQuerydsl().applyPagination(pageable, query);
         log.info("query : {}", query);
@@ -149,8 +153,8 @@ public class StudySearchImpl extends QuerydslRepositorySupport implements StudyS
         JPQLQuery<StudyEntity> query = from(qStudy);
         query.where(qStudy.memberId.eq(memberId));
         query.where(qStudy.displayYn.eq("Y"));
-        query.where(qStudy.displayStartDate.goe(LocalDate.parse(date)));
-        query.where(qStudy.displayEndDate.loe(LocalDate.parse(date)));
+        query.where(qStudy.displayStartDate.loe(LocalDate.parse(date)));
+        query.where(qStudy.displayEndDate.goe(LocalDate.parse(date)));
         query.where(qStudy.idx.gt(0));
         //paging
         this.getQuerydsl().applyPagination(pageable, query);

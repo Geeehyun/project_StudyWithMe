@@ -23,6 +23,20 @@ function nullCheck2(str) {
         return false;
     }
 }
+// 전부 공란인것만 체크 ver Array
+function nullCheck2Arr(arr) {
+    for(let e of $(arr)) {
+        if ($(e).val()) {
+            if($(e).val().trim()) {
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
 
 // 길이 체크용 str => 비교 대상 문자열 / min => 최소 글자 수 (min 값보다 str이 작으면 false로 체크) / max => 최대 글자 수 (max 값 보다 str이 크면 false로 체크)
 function lengthCheck(min, max, str) {
@@ -96,6 +110,16 @@ function dateCheck(element) {
     let today = new Date();
     let target = new Date($(element).val());
     if ( target > today) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function dateCheck2(element1, element2) {
+    let before = new Date($(element1).val());
+    let after = new Date($(element2).val());
+    if ( before > after) {
         return false;
     } else {
         return true;

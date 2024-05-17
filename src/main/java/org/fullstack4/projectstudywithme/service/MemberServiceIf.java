@@ -13,4 +13,5 @@ public interface MemberServiceIf {
     int leaveMember(String memberId);
     int checkId(String memberId);
     int checkEmail(String email);
+    MemberDTO selectMember(String memberId);
 }

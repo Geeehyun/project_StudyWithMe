@@ -37,7 +37,10 @@
                         </div>
                         <label class="p-2" for="pwd">PASSWORD</label>
                         <div class="form-group">
-                            <input type="password" class="form-control" data-name="비밀번호" name="pwd" id="pwd" placeholder="PASSWORD" >
+                            <div class="position-relative">
+                                <input type="password" class="form-control" data-name="비밀번호" name="pwd" id="pwd" placeholder="PASSWORD" >
+                                <i data-target="pwd" class="bi bi-eye-fill position-absolute showPwd" style="top : 30%; right: 10px;cursor: pointer" onclick="showOrHidePwd(this)"></i>
+                            </div>
                             <div class="p-1">
                                 <small>※ 10자 이상의 영문 소문자, 숫자, 특수문자 모두 조합하여 설정하여 주십시오</small>
                             </div>
@@ -45,12 +48,15 @@
                         </div>
                         <label class="p-2" for="pwdCheck">PASSWORD CHECK</label>
                         <div class="form-group">
-                            <input type="password" class="form-control" data-name="비밀번호 확인" name="pwdCheck" id="pwdCheck" placeholder="PASSWORD CHECK" >
+                            <div class="position-relative">
+                                <input type="password" class="form-control" data-name="비밀번호 확인" name="pwdCheck" id="pwdCheck" placeholder="PASSWORD CHECK" >
+                                <i data-target="pwdCheck" class="bi bi-eye-fill position-absolute showPwd" style="top : 30%; right: 10px;cursor: pointer" onclick="showOrHidePwd(this)"></i>
+                            </div>
                             <small id="err_pwdCheck" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="phone">PHONE</label>
                         <div class="form-group">
-                            <input type="tel" class="form-control" data-name="핸드폰" name="phone" id="phone" placeholder="phone" onkeyup="replacePhone(this)">
+                            <input type="tel" class="form-control" data-name="연락처" name="phone" id="phone" placeholder="phone" onkeyup="replacePhone(this)">
                             <small id="err_phone" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="email">EMAIL</label>
@@ -71,6 +77,17 @@
     </main><!-- End #main -->
 </div>
 <script layout:fragment="script">
+    // 비밀번호 확인
+    function showOrHidePwd(element) {
+        element.classList.toggle('bi-eye-fill');
+        element.classList.toggle('bi-eye-slash-fill');
+        let target = element.dataset.target;
+        if($('#'+target).attr('type') == 'password') {
+            $('#'+target).prop("type", "text");
+        } else {
+            $('#'+target).prop("type", "password");
+        }
+    }
     // Front 유효성 검사
     let checkTarget = ['memberId', 'memberName', 'pwd', 'pwdCheck', 'phone', 'email'];
     document.querySelector('#frmJoin').addEventListener('submit', checkForm);
@@ -149,7 +166,7 @@
                 $(target).text("");
                 $(target).addClass("text-danger");
                 $(target).removeClass("text-success");
-                if(!$(nullCheck($('#memberId')))) {
+                if(!nullCheck($('#memberId'))) {
                     $(target).text("아이디는 공백일 수 없습니다.");
                     $('#authId').val('false');
                 } else if(!idRegCheck($('#memberId'))) {
@@ -187,7 +204,13 @@
                 $(target).text("");
                 $(target).addClass("text-danger");
                 $(target).removeClass("text-success");
-                if(data > 0) {
+                if(!nullCheck($('#email'))) {
+                    $(target).text("이메일은 공백일 수 없습니다.");
+                    $('#authEmail').val('false');
+                } else if(!emailRegCheck($('#email'))) {
+                    $(target).text("올바른 이메일 형식을 사용해주세요. 예시: genius@genius.co.kr");
+                    $('#authEmail').val('false');
+                } else if(data > 0) {
                     $(target).text("이미 사용중인 이메일 입니다.");
                     $('#authEmail').val('false');
                 } else {

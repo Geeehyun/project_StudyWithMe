@@ -126,4 +126,11 @@ public class MemberServiceImpl implements MemberServiceIf {
         int result = (int) memberRepository.countAllByEmail(email);
         return result;
     }
+
+    @Override
+    public MemberDTO selectMember(String memberId) {
+        MemberEntity memberEntity = memberRepository.findAllByMemberId(memberId);
+        MemberDTO memberDTO = modelMapper.map(memberEntity, MemberDTO.class);
+        return memberDTO;
+    }
 }

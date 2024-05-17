@@ -1,5 +1,6 @@
 package org.fullstack4.projectstudywithme.controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -8,12 +9,20 @@ import lombok.extern.log4j.Log4j2;
 import org.fullstack4.projectstudywithme.Common.CookieUtil;
 import org.fullstack4.projectstudywithme.dto.LoginDTO;
 import org.fullstack4.projectstudywithme.dto.MemberDTO;
+import org.fullstack4.projectstudywithme.dto.MemberInfoDTO;
+import org.fullstack4.projectstudywithme.service.EmailService;
 import org.fullstack4.projectstudywithme.service.MemberServiceIf;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 @Log4j2
@@ -22,15 +31,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberServiceIf memberServiceIf;
+    private final ModelMapper modelMapper;
+    private final EmailService emailService;
+
     @GetMapping("/login")
     public void getLogin() {}
 
     @PostMapping("/login")
-    public String postLogin(LoginDTO loginDTO,
+    public String postLogin(@Valid LoginDTO loginDTO,
+                            BindingResult bindingResult,
                             @RequestParam(name = "auto_login", defaultValue = "off")String auto_login,
                             HttpServletResponse response,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
+        log.info("MemberController >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        if(bindingResult.hasErrors()){
+            log.info("MemberController >> postLogin Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
+            return "redirect:/login/login";
+        }
         MemberDTO memberDTO = memberServiceIf.login(loginDTO.getMemberId(), loginDTO.getPwd(), session);
         if(memberDTO != null) {
             if(memberDTO.getTryCount() == 0) {
@@ -73,9 +92,9 @@ public class MemberController {
     public String postJoin(@Valid MemberDTO memberDTO,
                          BindingResult bindingResult,
                          RedirectAttributes redirectAttributes) {
-        if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("err", bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("memberDTO", memberDTO);
+        if(bindingResult.hasErrors()){
+            log.info("MemberController >> postJoin Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
             return "redirect:/login/join";
         }
         log.info("Controller MemberDTO : {}", memberDTO);
@@ -109,21 +128,24 @@ public class MemberController {
                               @RequestParam(name = "memberId", defaultValue = "")String memberId,
                               @RequestParam(name = "org_pwd", defaultValue = "")String orgPwd,
                               @RequestParam(name = "new_pwd", defaultValue = "")String newPwd,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes) throws MessagingException, UnsupportedEncodingException {
         if(step.equals("1")) {
             if(!memberId.isEmpty()){
                 int result = memberServiceIf.updatePwdToTemp(memberId);
                 if(result > 0) {
+                    MemberDTO memberDTO = memberServiceIf.selectMember(memberId);
+                    emailService.sendEmail(memberDTO);
                     redirectAttributes.addAttribute("memberId", memberId);
                     redirectAttributes.addAttribute("step", "2");
                 } else {
                     redirectAttributes.addFlashAttribute("err", "회원정보를 다시 확인하세요");
                 }
+            } else {
+                redirectAttributes.addFlashAttribute("err", "입력된 아이디를 확인해주세요");
             }
             return "redirect:/login/findPwd";
         } else if(step.equals("2")) {
-            log.info("인생");
-            if(!orgPwd.isEmpty() && !newPwd.isEmpty()) {
+            if(!orgPwd.isEmpty() && Pattern.matches("^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$",newPwd)) {
                 log.info("memberId : {}", memberId);
                 log.info("orgPwd : {}", orgPwd);
                 log.info("newPwd : {}", newPwd);
@@ -147,15 +169,18 @@ public class MemberController {
     @GetMapping("/mypage")
     public void getMypage() {}
     @PostMapping("/mypage")
-    public String postMypage(@Valid MemberDTO newMemberDTO,
+    public String postMypage(@Valid MemberInfoDTO newMemberDTO,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes,
                              HttpSession session) {
-        if(bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("err", bindingResult.getAllErrors());
+        log.info("MemberController >> postMypage");
+        if(bindingResult.hasErrors()){
+            log.info("MemberController >> postMypage Error");
+            redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
+            return "redirect:/mypage/mypage";
         }
         log.info("newMemberDTO : {}", newMemberDTO);
-        int result = memberServiceIf.updateMember(newMemberDTO);
+        int result = memberServiceIf.updateMember(modelMapper.map(newMemberDTO, MemberDTO.class));
         if (result > 0) {
             session.setAttribute("memberDTO", newMemberDTO);
             redirectAttributes.addFlashAttribute("result", "변경완료");
