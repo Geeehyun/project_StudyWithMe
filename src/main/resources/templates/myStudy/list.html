@@ -39,8 +39,8 @@
                 <div class="p-2 bg-white mt-3">
                     <div class="d-flex justify-content-between mb-2">
                         <div>
-                            <button type="button" data-value="regDate" class="btn" th:classappend="${param.orderType == null or param.orderType.toString().equals('regDate')} ? 'btn-primary' : 'btn-light'"  onclick="changeOrderType(this)">등록순</button>
-                            <button type="button" data-value="likes" class="btn" th:classappend="${param.orderType != null and param.orderType.toString().equals('likes')} ? 'btn-primary' : 'btn-light'"  onclick="changeOrderType(this)">좋아요순</button>
+                            <button type="button" data-value="regDate" data-order="asc" class="btn btn-order" th:classappend="${param.orderType == null or param.orderType.toString().equals('regDate')} ? 'btn-primary' : 'btn-light'"  onclick="changeOrderType(this)">등록순 <i class="bi"></i></button>
+                            <button type="button" data-value="likes" data-order="desc" class="btn btn-order" th:classappend="${param.orderType != null and param.orderType.toString().equals('likes')} ? 'btn-primary' : 'btn-light'"  onclick="changeOrderType(this)">좋아요순 <i class="bi"></i></button>
                         </div>
                         <div class="d-flex align-items-center w-auto">
                             <select class="form-select" aria-label="Default select example" name="page_size" onchange="modifyPageSize(this);">
@@ -143,15 +143,23 @@
         location.href = '/mystudy/list' + queryString;
     }
 
+    window.onload = () => {
+        let btnOrder = document.querySelectorAll('.btn-order');
+        for(let btn of btnOrder) {
+            changeSortType(btn);
+        }
+    }
+
     function changeOrderType(element) {
         let orderType = element.dataset.value;
+        let sortType = element.dataset.order;
         let page = [[${param.page}]];
         let search_type = [[${param.search_type}]];
         let search_word = [[${param.search_word}]];
         let date1 = [[${param.date1}]];
         let date2 = [[${param.date2}]];
         let pageSize = [[${param.page_size}]]
-        let queryString = "?orderType=" + orderType;
+        let queryString = "?orderType=" + orderType + "&sortType=" + sortType;
         if (page != null) {
             queryString += "&page=" + page;
         }
@@ -171,6 +179,28 @@
             queryString += "&page_size=" + pageSize;
         }
         location.href = '/mystudy/list' + queryString;
+    }
+    function changeSortType(element) {
+        let thisOrderType =  [[${param.orderType}]];
+        let thisSortType = [[${param.sortType}]];
+        let orderType = element.dataset.value;
+        console.log(element);
+        console.log(thisOrderType);
+        console.log(thisSortType);
+        console.log(orderType);
+        if(orderType == thisOrderType) {
+            if(thisSortType == 'asc') {
+                element.dataset.order = 'desc';
+                element.querySelector('i').classList.add('bi-sort-numeric-up');
+            } else {
+                element.dataset.order = 'asc';
+                element.querySelector('i').classList.add('bi-sort-numeric-down-alt');
+            }
+        } else if (thisOrderType == null && thisSortType == null) {
+            if(orderType == 'regDate') {
+                element.querySelector('i').classList.add('bi-sort-numeric-down-alt');
+            }
+        }
     }
 
     function pageLink(element) {

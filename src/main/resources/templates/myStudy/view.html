@@ -151,29 +151,31 @@
 
     function likeThis(element) {
         let idx = element.dataset.idx;
-        $.ajax({
-            url: "/mystudy/like",
-            method: 'post',
-            dataType : 'json',
-            data : {
-                "idx" : idx
-            },
-            success: function (data) {
-                console.log(data);
-                alert(data.message);
-                if(data.result == "success") {
-                    element.setAttribute("disabled", "disabled");
-                    element.firstChild.classList.add("text-danger");
-                    let likeCnt = document.getElementById('likeCnt').innerText;
-                    document.getElementById('likeCnt').innerText = (String)(parseInt(likeCnt) + 1);
+        if(confirm("좋아요 하면 취소하실 수 없습니다. 좋아요 하시겠습니까?")) {
+            $.ajax({
+                url: "/mystudy/like",
+                method: 'post',
+                dataType : 'json',
+                data : {
+                    "idx" : idx
+                },
+                success: function (data) {
+                    console.log(data);
+                    alert(data.message);
+                    if(data.result == "success") {
+                        element.setAttribute("disabled", "disabled");
+                        element.firstChild.classList.add("text-danger");
+                        let likeCnt = document.getElementById('likeCnt').innerText;
+                        document.getElementById('likeCnt').innerText = (String)(parseInt(likeCnt) + 1);
+                    }
+                },
+                error : function(xhr, status, error) {
+                    console.log("xhr! : " + xhr);
+                    console.log("status! : " + status);
+                    console.log("error! : " + error);
                 }
-            },
-            error : function(xhr, status, error) {
-                console.log("xhr! : " + xhr);
-                console.log("status! : " + status);
-                console.log("error! : " + error);
-            }
-        })
+            })
+        }
     }
 </script>
 </body>

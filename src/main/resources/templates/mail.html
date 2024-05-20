@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <body>
-<div style="margin:100px;" th:inline="html">
+<div style="margin:5%;" th:inline="html">
     <h1> 안녕하세요. <span th:text="${name}"></span>님</h1>
     <h1> 학습 공유 시스템 Study With Me 입니다.</h1>
     <br>
@@ -10,11 +9,13 @@
     <br>
 
     <div align="center" style="border:1px solid black; font-family:verdana;">
-        <div class="p-5" style="font-size:130%" th:text="${code}"> </div>
+        <div style="font-size:130%; padding: 30px;border-radius: 30px" th:text="${code}"> </div>
     </div>
-    <br/>
+    <br>
+
+    <p>우리 이제 다시는 비밀번호를 잊지말기로 약속💖</p>
+    <p>Study With Me로 돌아가 새 비밀번호로 변경해주세요.</p>
+    <br>
 </div>
-
-
 </body>
 </html>

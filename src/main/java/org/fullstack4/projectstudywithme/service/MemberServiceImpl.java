@@ -12,6 +12,8 @@ import org.fullstack4.projectstudywithme.domain.MemberEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -132,5 +134,12 @@ public class MemberServiceImpl implements MemberServiceIf {
         MemberEntity memberEntity = memberRepository.findAllByMemberId(memberId);
         MemberDTO memberDTO = modelMapper.map(memberEntity, MemberDTO.class);
         return memberDTO;
+    }
+
+    @Override
+    public List<MemberDTO> memberList(String memberIdOrName) {
+        List<MemberEntity> memberEntityList = memberRepository.findMemberEntityByMemberIdLikeOrMemberNameLikeAndStatusEquals("%"+memberIdOrName+"%", "%"+memberIdOrName+"%", "Y");
+        List<MemberDTO> memberDTOList = memberEntityList.stream().map(vo -> modelMapper.map(vo, MemberDTO.class)).collect(Collectors.toList());
+        return memberDTOList;
     }
 }

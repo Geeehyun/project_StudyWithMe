@@ -23,7 +23,7 @@
                     <form id="frmLogin" action="" method="post" role="form" class="php-email-form">
                         <label class="p-2" for="memberId">ID</label>
                         <div class="form-group">
-                            <input data-name="아이디" type="text" class="form-control" name="memberId" id="memberId" placeholder="ID">
+                            <input data-name="아이디" type="text" class="form-control" name="memberId" id="memberId" th:value="${saved_id != null && not saved_id.toString().equals('') ? saved_id : ''}" placeholder="ID">
                             <small id="err_memberId" class="p-1 text-danger info"></small>
                         </div>
                         <label class="p-2" for="pwd">PASSWORD</label>
@@ -36,9 +36,15 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" name="auto_login" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Auto Login</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="auto_login" type="checkbox" role="switch" id="auto_login">
+                                    <label class="form-check-label" for="auto_login">자동 로그인</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" name="saved_id" type="checkbox" role="switch" id="saved_id" th:checked="${saved_id != null ? not saved_id.toString().equals('') : false}">
+                                    <label class="form-check-label" for="saved_id">아이디 저장</label>
+                                </div>
                             </div>
                             <a href="/login/findPwd">Find Password</a>
                         </div>

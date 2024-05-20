@@ -3,6 +3,8 @@ package org.fullstack4.projectstudywithme.service;
 import jakarta.servlet.http.HttpSession;
 import org.fullstack4.projectstudywithme.dto.MemberDTO;
 
+import java.util.List;
+
 public interface MemberServiceIf {
     MemberDTO login(String memberId, String pwd, HttpSession session);
     MemberDTO autoLogin(String memberId, HttpSession session);
@@ -14,4 +16,5 @@ public interface MemberServiceIf {
     int checkId(String memberId);
     int checkEmail(String email);
     MemberDTO selectMember(String memberId);
+    List<MemberDTO> memberList(String memberIdOrName);
 }

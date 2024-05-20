@@ -29,6 +29,7 @@ public class PageResponseDTO<E> {
     private String date1;
     private String date2;
     private String orderType;
+    private String sortType;
     private String linkParams;
 
     List<E> dtoList;

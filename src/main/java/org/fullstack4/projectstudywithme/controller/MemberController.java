@@ -1,6 +1,7 @@
 package org.fullstack4.projectstudywithme.controller;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import org.fullstack4.projectstudywithme.dto.MemberInfoDTO;
 import org.fullstack4.projectstudywithme.service.EmailService;
 import org.fullstack4.projectstudywithme.service.MemberServiceIf;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,12 +23,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 
 @Log4j2
-@RequestMapping(value = {"/login", "/mypage"})
+@RequestMapping(value = {"/login", "/mypage", "/member"})
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -35,16 +39,27 @@ public class MemberController {
     private final EmailService emailService;
 
     @GetMapping("/login")
-    public void getLogin() {}
+    public void getLogin(HttpServletRequest request, Model model) {
+        String saved_id = CookieUtil.getCookieValue(request, "saved_id");
+        if(saved_id != null) {
+            model.addAttribute("saved_id", saved_id);
+        }
+    }
 
     @PostMapping("/login")
     public String postLogin(@Valid LoginDTO loginDTO,
                             BindingResult bindingResult,
                             @RequestParam(name = "auto_login", defaultValue = "off")String auto_login,
+                            @RequestParam(name = "saved_id", defaultValue = "off")String saved_id,
                             HttpServletResponse response,
                             HttpSession session,
                             RedirectAttributes redirectAttributes) {
         log.info("MemberController >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        if(saved_id.equals("on") && loginDTO.getMemberId() != null) {
+            CookieUtil.setCookies(response, 999999, "saved_id", loginDTO.getMemberId());
+        } else {
+            CookieUtil.setDeleteCookie(response, "saved_id");
+        }
         if(bindingResult.hasErrors()){
             log.info("MemberController >> postLogin Error");
             redirectAttributes.addFlashAttribute("err", "입력된 정보를 다시 확인해주세요");
@@ -202,5 +217,28 @@ public class MemberController {
     public String checkEmail(String email) {
         String result = String.valueOf(memberServiceIf.checkEmail(email));
         return result;
+    }
+
+    @RequestMapping(value = "/memberList", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public String memberList(@RequestParam(name = "memberIdOrName", defaultValue = "") String memberIdOrName) {
+        log.info("========================================== memberList 시작");
+        log.info("memberIdOrName : {}", memberIdOrName);
+        JSONArray jsonArray = new JSONArray();
+        if(!memberIdOrName.isEmpty()) {
+            List<MemberDTO> memberDTOList = memberServiceIf.memberList(memberIdOrName);
+            log.info("memberDTOList : {}", memberDTOList);
+            for(MemberDTO dto : memberDTOList) {
+                log.info("dto : {}", dto);
+                Map<String, String> resultMap = new HashMap<>();
+                resultMap.put("\"memberId\"", "\""+dto.getMemberId()+"\"");
+                resultMap.put("\"memberName\"", "\""+dto.getMemberName()+"\"");
+                log.info("resultMap : {}", resultMap);
+                jsonArray.put(resultMap);
+            }
+            log.info("jsonArray : {}", jsonArray);
+        }
+        log.info("========================================== memberList 종료");
+        return jsonArray.toString();
     }
 }

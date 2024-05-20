@@ -40,6 +40,8 @@ public class PageRequestDTO {
     private String date2;
     @Builder.Default
     private String orderType="regDate";
+    @Builder.Default
+    private String sortType="desc";
 
     private String linkParams;
 
@@ -59,7 +61,13 @@ public class PageRequestDTO {
     }
 
     public PageRequest getPageable(String...props) {
-        return PageRequest.of(this.page-1, this.page_size, Sort.by(props).descending());
+        PageRequest pageRequest = null;
+        if (this.sortType.equals("asc")) {
+            pageRequest = PageRequest.of(this.page-1, this.page_size, Sort.by(props).ascending());
+        } else {
+            pageRequest = PageRequest.of(this.page-1, this.page_size, Sort.by(props).descending());
+        }
+        return pageRequest;
     }
 
     public String getLinkParams() {
@@ -86,6 +94,9 @@ public class PageRequestDTO {
             }
             if(orderType != null && !orderType.isEmpty()) {
                 sb.append("&orderType=" + this.orderType);
+            }
+            if(sortType != null && !sortType.isEmpty()) {
+                sb.append("&sortType=" + this.sortType);
             }
             linkParams = sb.toString();
         }

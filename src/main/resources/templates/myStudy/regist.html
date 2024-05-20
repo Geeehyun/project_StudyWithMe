@@ -84,9 +84,14 @@
                                 <th class="text-center bg-primary text-white align-middle" scope="row">공유 받은 사람</th>
                                 <td class="text-start" colspan="3">
                                     <div class="mb-2">
-                                        <div class="input-group mb-1 w-25">
-                                            <input type="text" id="memberId" maxlength="50" class="form-control">
-                                            <button class="btn btn-outline-secondary" type="button" onclick="addMember()">추가</button>
+                                        <div class="d-flex gap-2">
+                                            <div class="input-group mb-1 w-25">
+                                                <input type="text" id="memberId" maxlength="50" class="form-control">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="addMember()">추가</button>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" onclick="getMemberList()">
+                                                회원조회
+                                            </button>
                                         </div>
                                         <small class="p-1">* 아이디로 추가해주세요</small>
                                     </div>
@@ -129,186 +134,83 @@
                 </div>
             </div>
         </section>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalLabel">회원조회</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body d-flex flex-column gap-3">
+                        <div>
+                            <label for="idOrName" class="form-label">아이디/이름</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="idOrName" name="searchMember" aria-describedby="button-addon2">
+                                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="AJAXMemberList()">조회</button>
+                            </div>
+                        </div>
+                        <div class="bg-light border border-primary rounded p-3">
+                            <p><strong>선택된 리스트</strong></p>
+                            <div id="selected-list" class="d-flex gap-3">
+                                리스트가 없습니다.
+                            </div>
+                        </div>
+                        <div class="overflow-y-scroll" style="height: 300px">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width: 10%">
+                                <col style="width: 35%">
+                                <col style="width: 35%">
+                                <col style="width: 20%">
+                            </colgroup>
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th class="text-center bg-primary text-white" scope="col">No</th>
+                                    <th class="text-center bg-primary text-white" scope="col">ID</th>
+                                    <th class="text-center bg-primary text-white" scope="col">이름</th>
+                                    <th class="text-center bg-primary text-white" scope="col">선택</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modal-tBody">
+                                <tr>
+                                    <td class="text-center">3</td>
+                                    <td class="text-center">testID3</td>
+                                    <td class="text-center">테스트계정3</td>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" data-name="테스트계정3" data-id="testID3" id="id-testID3" onchange="addOrRemove(this)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">2</td>
+                                    <td class="text-center">testID2</td>
+                                    <td class="text-center">테스트계정2</td>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" data-name="테스트계정2" data-id="testID2" id="id-testID2" onchange="addOrRemove(this)">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">testID1</td>
+                                    <td class="text-center">테스트계정1</td>
+                                    <td class="text-center">
+                                        <input class="form-check-input" type="checkbox" data-name="테스트계정1" data-id="testID1" id="id-testID1" onchange="addOrRemove(this)">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close" onclick="saveThisMem()">추가</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main><!-- End #main -->
 </div>
-<script layout:fragment="script">
-    function addInput(element) {
-        let type = element.dataset.type;
-        let divEl = document.createElement('div');
-        let inputEl = document.createElement('input');
-        let buttonEl = document.createElement('button');
-        divEl.classList.add('input-group', 'mb-1', 'w-25');
-        inputEl.classList.add('form-control');
-        inputEl.type = 'text';
-        inputEl.name = type;
-        inputEl.maxLength = 10;
-        buttonEl.classList.add('btn', 'btn-outline-secondary');
-        buttonEl.onclick = ()=> (deleteThis(buttonEl));
-        buttonEl.type = 'button';
-        buttonEl.innerText = 'X';
-        divEl.append(inputEl);
-        divEl.append(buttonEl);
-        if(element.parentElement.querySelectorAll('div.input-group').length <4) {
-            element.parentElement.append(divEl);
-        } else {
-            alert("최대 4개까지 추가할 수 있습니다.")
-        }
-    }
-    function deleteThis(element) {
-        if(element.parentElement.parentElement.querySelectorAll('div.input-group').length > 1) {
-            element.parentElement.remove();
-        } else {
-            alert("최소 1개의 입력칸이 필요합니다.")
-        }
-    }
-    function deleteThisToShare(element) {
-        element.parentElement.parentElement.remove();
-    }
-    function changeDisplay(element) {
-        let displayDates = document.querySelectorAll('.displayDate');
-        if(element.value == 'N') {
-            for (let displayDate of displayDates) {
-                displayDate.value = "";
-                displayDate.setAttribute('disabled','disabled');
-            }
-        } else {
-            for (let displayDate of displayDates) {
-                displayDate.removeAttribute('disabled');
-            }
-        }
-    }
-
-    function addMemberList(data) {
-        let memberList = document.querySelectorAll('input[name=sharedMemberId]');
-        for(let mem of memberList) {
-            if(mem.value == data.memberId) {
-                alert("이미 추가된 멤버 입니다.");
-                return;
-            }
-        }
-        let divEl = document.createElement('div');
-        let spanEl = document.createElement('span');
-        let spanEl2 = document.createElement('span');
-        let buttonEl = document.createElement('button');
-        let inputEl = document.createElement('input');
-        let inputEl2 = document.createElement('input');
-        spanEl.classList.add('d-block');
-        spanEl2.innerText = data.memberName;
-        buttonEl.classList.add('btn', 'badge', 'bg-primary-dark');
-        buttonEl.onclick = ()=> (deleteThisToShare(buttonEl));
-        buttonEl.type = 'button';
-        buttonEl.innerText = 'X';
-        inputEl.type = 'hidden';
-        inputEl.name = 'sharedMemberId';
-        inputEl.value = data.memberId;
-        inputEl2.type = 'hidden';
-        inputEl2.name = 'sharedMemberName';
-        inputEl2.value = data.memberName;
-        spanEl.append(spanEl2);
-        spanEl.append(buttonEl);
-        divEl.append(spanEl);
-        divEl.append(inputEl);
-        divEl.append(inputEl2);
-        document.getElementById('memberList').append(divEl);
-    }
-
-    function addMember() {
-        let memberId = document.getElementById('memberId');
-        let memberIdVal = document.getElementById('memberId').value;
-        if(memberIdVal.length > 0) {
-            $.ajax({
-                url: "/mystudy/selectMember",
-                method: 'post',
-                dataType : 'json',
-                data : {
-                    "memberId" : memberIdVal
-                },
-                success: function (data) {
-                    console.log(data);
-                    if(data.message == '조회 성공') {
-                        addMemberList(data);
-                        memberId.value = '';
-                    } else {
-                        memberId.value = '';
-                        alert(data.message);
-                    }
-                },
-                error : function(xhr, status, error) {
-                    console.log("xhr! : " + xhr);
-                    console.log("status! : " + status);
-                    console.log("error! : " + error);
-                }
-            })
-        } else {
-            alert("아이디를 입력해주세요");
-        }
-    }
-
-    // 썸네일 이미지 변경
-    function changeProfileImg(e) {
-        let files = e.target.files;
-        let reader = new FileReader();
-        reader.onload = (e)=>{
-            $('#thumbnail_img').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(files[0]);
-    }
-
-    // Front 유효성검사
-    let checkTarget = ['title', 'displayYn', 'displayStartDate', 'displayEndDate', 'category', 'tags', 'content'];
-    document.querySelector('#frmPost').addEventListener('submit', checkForm);
-    function checkForm() {
-        event.preventDefault();
-        for (let info of document.querySelectorAll('.info')) {
-            $(info).text("");
-        }
-        // 공란 검사
-        for (let element of checkTarget) {
-            let target = $('input[name=' + element + ']');
-            if (element == 'displayYn') {
-                if(!$('input#shareN').is(":checked") && !$('input#shareY').is(":checked")) {
-                    $('#err_'+element).text($(target).data('name') + "을 선택해주세요");
-                    $(target).focus();
-                    return false;
-                }
-            } else if(element == 'displayStartDate' || element == 'displayEndDate') {
-                if($('input#shareY').is(":checked")) {
-                    if (!nullCheck2($(target))) {
-                        $('#err_displayDate').text($(target).data('name') + "을/를 입력해주세요");
-                        $(target).focus();
-                        return false;
-                    }
-                }
-            } else if(element == 'category' || element == 'tags') {
-                if (!nullCheck2Arr($(target))) {
-                    $('#err_' + element).text($(target).data('name') + "을/를 최소 1건 이상 입력해주시고, 추가한 모든 칸을 입력해주세요");
-                    $(target).focus();
-                    return false;
-                }
-            } else if(element == 'content') {
-                if (!nullCheck2($('#content'))) {
-                    $('#err_' + element).text($('#content').data('name') + "을/를 입력해주세요");
-                    $('#content').focus();
-                    return false;
-                }
-            } else if (!nullCheck2($(target))) {
-                $('#err_' + element).text($(target).data('name') + "을/를 입력해주세요");
-                $(target).focus();
-                return false;
-            }
-        }
-        // 날짜 체크
-        if($('input#shareY').is(":checked")) {
-            if(!dateCheck2($('#displayStartDate'), $('#displayEndDate'))) {
-                $('#err_displayDate').text("시작 날짜는 종료날짜 보다 미래일 수 없습니다.");
-                $('#displayStartDate').focus();
-                return false;
-            }
-        }
-        if(confirm("등록하시겠습니까?")) {
-            document.getElementById('frmPost').submit();
-        };
-    }
-</script>
+<script src="/js/studyRegistAndModify.js" layout:fragment="script"></script>
 </body>
 </html>
