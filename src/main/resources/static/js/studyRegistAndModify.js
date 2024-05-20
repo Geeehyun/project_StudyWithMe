@@ -39,6 +39,20 @@ function deleteThis2(element) {
     }
 }
 
+function changeDisplay(element) {
+    let displayDates = document.querySelectorAll('.displayDate');
+    if(element.value == 'N') {
+        for (let displayDate of displayDates) {
+            displayDate.value = "";
+            displayDate.setAttribute('disabled','disabled');
+        }
+    } else {
+        for (let displayDate of displayDates) {
+            displayDate.removeAttribute('disabled');
+        }
+    }
+}
+
 function addMemberList(data) {
     let memberList = document.querySelectorAll('input[name=sharedMemberId]');
     for(let mem of memberList) {
@@ -159,6 +173,17 @@ function checkForm() {
             $(target).focus();
             return false;
         }
+    }
+    // 길이 검사
+    if(!lengthCheck(1, 100, $('input#title'))){
+        $('#err_title').text("제목은 1글자 이상 100글자 미만으로 입력해주세요");
+        $('#title').focus();
+        return false;
+    }
+    if(!lengthCheck(1, 1000, $('textarea#content'))){
+        $('#err_content').text("내용은 1글자 이상 1000글자 미만으로 입력해주세요");
+        $('#content').focus();
+        return false;
     }
     // 날짜 체크
     if($('input#shareY').is(":checked")) {

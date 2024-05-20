@@ -23,7 +23,7 @@
                             <tr>
                                 <th class="text-center bg-primary text-white align-middle" scope="row">제목</th>
                                 <td class="text-start" colspan="3">
-                                    <input data-name="제목" class="form-control" type="text" name="title" maxlength="20">
+                                    <input data-name="제목" class="form-control" type="text" name="title" id="title" maxlength="100">
                                     <small id="err_title" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
@@ -116,7 +116,7 @@
                                     </div>
                                 </td>
                                 <td class="text-start" colspan="3">
-                                    <textarea data-name="내용" name="content" class="form-control" id="content" rows="12"></textarea>
+                                    <textarea data-name="내용" name="content" class="form-control" maxlength="1000" id="content" rows="12"></textarea>
                                     <small id="err_content" class="p-1 text-danger info"></small>
                                 </td>
                             </tr>
