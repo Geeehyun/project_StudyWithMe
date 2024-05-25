@@ -1,4 +1,4 @@
-# [▶ 최종 보고서 보러가기](https://github.com/Geeehyun/project_StudyWithMe/blob/master/%EA%B0%9C%EC%9D%B8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_Project_StudyWithMe_%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf)
+# [▶ 최종 보고서 보러가기](https://github.com/Geeehyun/project_StudyWithMe/blob/master/%5B%ED%92%80%EC%8A%A4%ED%83%9D4%EA%B8%B0%20%EC%9E%A5%EC%A7%80%ED%98%84%5D%EA%B0%9C%EC%9D%B8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_Project_StudyWithMe_%EA%B2%B0%EA%B3%BC%EB%B3%B4%EA%B3%A0%EC%84%9C.pdf)
 # 📖 프로젝트 Study With Me
 ![개인프로젝트_Project_StudyWithMe_결과보고서](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/8abd5afc-e78b-4993-b0d9-54ee63266732)
 ## 프로젝트 개요
@@ -37,9 +37,9 @@
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/f8acc7b7-ae95-4aca-b688-744b366b8751)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/3ca37545-6d54-4e5e-a35e-e0d946e1b645)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/545752cc-49f2-46f4-adda-5252aec28099)
-![img.png](img.png)
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
+![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/9e96c513-6575-4b26-ab15-b04f8f3ce94f)
+![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/e26be284-1ace-4454-aa4f-b6fe0a2d432b)
+![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/c391919e-13fa-4a66-8d50-6dcd674e28a6)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/4c33c29f-cf09-410e-ac95-60687e252288)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/32b49831-aa55-4efc-891e-753518721396)
 
