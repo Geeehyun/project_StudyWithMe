@@ -14,3 +14,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, String> {
     long countAllByEmail(String email);
     List<MemberEntity> findMemberEntityByMemberIdLikeOrMemberNameLikeAndStatusEquals(String memberId, String memberName, String status);
 }
+
+

@@ -9,11 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @Log4j2
 @SpringBootTest
 public class MemberServiceTests {
-//    @Autowired
-//    private MemberServiceIf memberServiceIf;
+    @Autowired
+    private MemberServiceIf memberServiceIf;
 //    @Test
 //    public void testLogin() {
 //        log.info("===========================");
@@ -69,4 +71,14 @@ public class MemberServiceTests {
 //        int result = memberServiceIf.leaveMember("wkdwl578");
 //        log.info("result : {}", result);
 //    }
+
+    @Test
+    public void testMemberList() {
+        log.info("======================== testMemberList 시작");
+        List<MemberDTO> memberDTOList = memberServiceIf.memberList("%dddwt%");
+        for (MemberDTO dto : memberDTOList) {
+            log.info("dto : {}", dto);
+        }
+        log.info("======================== testMemberList 종료");
+    }
 }

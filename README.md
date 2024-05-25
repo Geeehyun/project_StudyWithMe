@@ -37,8 +37,9 @@
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/f8acc7b7-ae95-4aca-b688-744b366b8751)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/3ca37545-6d54-4e5e-a35e-e0d946e1b645)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/545752cc-49f2-46f4-adda-5252aec28099)
-![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/75977773-8ad8-44f1-9660-d7c3414e6b3a)
-![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/018ce9c9-3be0-4feb-9f11-e06c3c9cb206)
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/4c33c29f-cf09-410e-ac95-60687e252288)
 ![image](https://github.com/Geeehyun/project_StudyWithMe/assets/141742542/32b49831-aa55-4efc-891e-753518721396)
 
